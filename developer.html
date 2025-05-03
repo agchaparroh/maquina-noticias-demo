@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Máquina de Noticias - Panel del Desarrollador</title>
+    <!-- Tailwind CSS vía CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Estilos personalizados -->
+    <link rel="stylesheet" href="css/custom.css">
+</head>
+<body class="bg-gray-100">
+    <nav class="bg-blue-600 text-white p-4">
+        <div class="container mx-auto flex justify-between items-center">
+            <h1 class="text-xl font-bold">Máquina de Noticias</h1>
+            <ul class="flex space-x-4">
+                <li><a href="index.html" class="hover:underline">Inicio</a></li>
+                <li><a href="dashboard.html" class="hover:underline">Dashboard de Revisión</a></li>
+                <li><a href="chat.html" class="hover:underline">Chat de Investigación</a></li>
+                <li><a href="developer.html" class="font-bold underline">Panel Desarrollador</a></li>
+                <li><a href="ingesta.html" class="hover:underline">Ingesta de Documentos</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <div class="container mx-auto px-4 py-8">
+        <h1 class="text-3xl font-bold mb-8">Panel del Desarrollador</h1>
+        
+        <!-- Estado general del sistema -->
+        <div class="bg-white rounded-lg shadow mb-8">
+            <div class="flex items-center justify-between p-6">
+                <div class="flex items-center">
+                    <div class="text-4xl mr-6">🟢</div>
+                    <div>
+                        <h1 class="text-2xl font-bold mb-1">Estado del Sistema</h1>
+                        <p class="text-lg">
+                            4/5 componentes OK, 1 WARN, 0 ERROR
+                        </p>
+                        <p class="text-sm text-gray-500 mt-1">
+                            Última actualización: hace 5 minutos
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Alertas Banner -->
+        <div class="bg-white rounded-lg shadow mb-8">
+            <div 
+                class="p-6 flex justify-between items-center cursor-pointer border-b"
+            >
+                <div class="flex items-center text-xl font-bold">
+                    <span class="mr-2">🔔</span>
+                    2 Alertas Activas
+                </div>
+                <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                    <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" />
+                </svg>
+            </div>
+            
+            <div class="p-6">
+                <!-- Filtros -->
+                <div class="flex flex-wrap gap-2 mb-4">
+                    <button class="p-1 rounded-full text-sm bg-gray-300 text-gray-700">
+                        Todas
+                    </button>
+                    <button class="p-1 rounded-full text-sm bg-red-100 text-red-600">
+                        ERROR
+                    </button>
+                    <button class="p-1 rounded-full text-sm bg-yellow-100 text-yellow-600">
+                        WARN
+                    </button>
+                    <button class="p-1 rounded-full text-sm bg-blue-100 text-blue-600">
+                        INFO
+                    </button>
+                    
+                    <select class="ml-auto p-1 rounded text-sm border">
+                        <option value="">Todos los componentes</option>
+                        <option>ConectorRSS</option>
+                        <option>ExtractorMetadatos</option>
+                        <option>GestorColas</option>
+                        <option>Pipeline</option>
+                    </select>
+                </div>
+                
+                <!-- Lista de alertas -->
+                <ul class="space-y-2">
+                    <li class="p-2 rounded bg-yellow-100 text-yellow-800 flex items-start">
+                        <div class="mr-2 mt-0.5">
+                            ⚠️
+                        </div>
+                        <div class="flex-1">
+                            <div class="flex justify-between items-start">
+                                <div>
+                                    <span class="text-xs opacity-75">
+                                        hace 10 minutos
+                                    </span>
+                                    <button class="ml-1 font-medium underline">
+                                        Pipeline
+                                    </button>
+                                </div>
+                                <button
+                                    class="ml-4 bg-white bg-opacity-30 hover:bg-opacity-50 rounded p-0.5 text-xs"
+                                >
+                                    ✓ Reconocer
+                                </button>
+                            </div>
+                            <div class="mt-0.5">
+                                Cola creciendo, procesamiento lento (queue_size: 45, por encima del umbral warning 30)
+                            </div>
+                        </div>
+                    </li>
+                    
+                    <li class="p-2 rounded bg-red-100 text-red-800 flex items-start">
+                        <div class="mr-2 mt-0.5">
+                            ❗
+                        </div>
+                        <div class="flex-1">
+                            <div class="flex justify-between items-start">
+                                <div>
+                                    <span class="text-xs opacity-75">
+                                        hace 32 minutos
+                                    </span>
+                                    <button class="ml-1 font-medium underline">
+                                        ConectorRSS
+                                    </button>
+                                </div>
+                                <button
+                                    class="ml-4 bg-white bg-opacity-30 hover:bg-opacity-50 rounded p-0.5 text-xs"
+                                >
+                                    ✓ Reconocer
+                                </button>
+                            </div>
+                            <div class="mt-0.5">
+                                Falló conexión a API de feeds para fuentes: el_pais, el_mundo (error 403 Forbidden)
+                            </div>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        
+        <!-- Panel de diagnóstico -->
+        <div class="bg-white rounded-lg shadow mb-8">
+            <div class="p-6 border-b">
+                <h2 class="text-xl flex items-center">
+                    <span class="mr-2">🔎</span>
+                    Diagnóstico Inteligente
+                </h2>
+                <p class="text-base text-gray-600">Problemas potenciales detectados automáticamente</p>
+            </div>
+            
+            <div class="p-6">
+                <ul class="space-y-4">
+                    <li class="p-4 rounded border bg-yellow-100 text-yellow-800 border-yellow-200">
+                        <div class="flex justify-between items-start">
+                            <div>
+                                <h3 class="text-base font-medium">Posible fallo en la conexión a la fuente de datos</h3>
+                                <div class="mt-2 text-sm">
+                                    <div class="mb-0.5">
+                                        <span class="font-medium">Severidad:</span> MEDIUM
+                                    </div>
+                                    <div>
+                                        <span class="font-medium">Componentes afectados:</span> ConectorRSS, ExtractorMetadatos
+                                    </div>
+                                </div>
+                            </div>
+                            <button class="bg-gray-200 hover:bg-gray-300 text-gray-700 font-bold py-1 px-2 rounded text-sm">
+                                🔍 Generar Prompt de Diagnóstico
+                            </button>
+                        </div>
+                    </li>
+                    
+                    <li class="p-4 rounded border bg-red-100 text-red-800 border-red-200">
+                        <div class="flex justify-between items-start">
+                            <div>
+                                <h3 class="text-base font-medium">Crecimiento anómalo en la cola de procesamiento</h3>
+                                <div class="mt-2 text-sm">
+                                    <div class="mb-0.5">
+                                        <span class="font-medium">Severidad:</span> HIGH
+                                    </div>
+                                    <div>
+                                        <span class="font-medium">Componentes afectados:</span> GestorColas
+                                    </div>
+                                </div>
+                            </div>
+                            <button class="bg-gray-200 hover:bg-gray-300 text-gray-700 font-bold py-1 px-2 rounded text-sm">
+                                🔍 Generar Prompt de Diagnóstico
+                            </button>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        
+        <!-- Componentes (Grid) -->
+        <h2 class="text-2xl font-bold mb-4">Estado de Componentes</h2>
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mb-8">
+            <!-- Componente OK -->
+            <div class="border rounded-lg overflow-hidden">
+                <div class="p-2 border-b bg-green-100 flex justify-between items-center">
+                    <div class="flex items-center">
+                        <span class="text-xl mr-2">🟢</span>
+                        <h3 class="font-bold text-green-700">ConectorBD</h3>
+                    </div>
+                    <div class="p-1 rounded text-sm text-green-700 font-medium">
+                        OK
+                    </div>
+                </div>
+                
+                <div class="p-4 bg-white">
+                    <div class="mb-2">
+                        <div class="text-sm text-gray-600 mb-0.5">Último mensaje:</div>
+                        <div class="bg-gray-100 p-1 rounded text-xs">Conexión a base de datos estable</div>
+                    </div>
+                    
+                    <div class="mb-2 flex items-center">
+                        <div class="text-sm text-gray-600 mr-2">Último heartbeat:</div>
+                        <div class="text-xs">hace 2 minutos</div>
+                    </div>
+                    
+                    <div class="mb-2">
+                        <div class="text-sm text-gray-600 mb-0.5">Métricas principales:</div>
+                        <div class="space-y-1">
+                            <div class="flex items-center justify-between">
+                                <div class="text-xs">conn_open:</div>
+                                <div class="text-xs font-medium">12</div>
+                            </div>
+                            <div class="flex items-center justify-between">
+                                <div class="text-xs">queries_min:</div>
+                                <div class="text-xs font-medium">45</div>
+                            </div>
+                            <div class="flex items-center justify-between">
+                                <div class="text-xs">avg_query_time_ms:</div>
+                                <div class="text-xs font-medium">22</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="p-2 bg-gray-100 border-t flex space-x-2">
+                    <button class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-1 px-2 rounded text-sm">
+                        🔍 Diagnóstico
+                    </button>
+                    <button class="bg-gray-300 hover:bg-gray-400 text-gray-700 font-bold py-1 px-2 rounded text-sm">
+                        📊 Histórico
+                    </button>
+                </div>
+            </div>
+            
+            <!-- Componente WARNING -->
+            <div class="border rounded-lg overflow-hidden">
+                <div class="p-2 border-b bg-yellow-100 flex justify-between items-center">
+                    <div class="flex items-center">
+                        <span class="text-xl mr-2">🟡</span>
+                        <h3 class="font-bold text-yellow-700">Pipeline</h3>
+                    </div>
+                    <div class="p-1 rounded text-sm text-yellow-700 font-medium">
+                        WARN
+                    </div>
+                </div>
+                
+                <div class="p-4 bg-white">
+                    <div class="mb-2">
+                        <div class="text-sm text-gray-600 mb-0.5">Último mensaje:</div>
+                        <div class="bg-gray-100 p-1 rounded text-xs">Cola creciendo, procesamiento lento</div>
+                    </div>
+                    
+                    <div class="mb-2 flex items-center">
+                        <div class="text-sm text-gray-600 mr-2">Último heartbeat:</div>
+                        <div class="text-xs">hace 4 minutos</div>
+                    </div>
+                    
+                    <div class="mb-2">
+                        <div class="text-sm text-gray-600 mb-0.5">Métricas principales:</div>
+                        <div class="space-y-1">
+                            <div class="flex items-center justify-between">
+                                <div class="text-xs">queue_size:</div>
+                                <div class="text-xs font-medium text-yellow-600">45 ⚠️</div>
+                            </div>
+                            <div class="flex items-center justify-between">
+                                <div class="text-xs">workers_active:</div>
+                                <div class="text-xs font-medium">3</div>
+                            </div>
+                            <div class="flex items-center justify-between">
+                                <div class="text-xs">processed_ok_1h:</div>
+                                <div class="text-xs font-medium">45</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="p-2 bg-gray-100 border-t flex space-x-2">
+                    <button class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-1 px-2 rounded text-sm">
+                        🔍 Diagnóstico
+                    </button>
+                    <button class="bg-gray-300 hover:bg-gray-400 text-gray-700 font-bold py-1 px-2 rounded text-sm">
+                        📊 Histórico
+                    </button>
+                </div>
+            </div>
+            
+            <!-- Componente ERROR -->
+            <div class="border rounded-lg overflow-hidden">
+                <div class="p-2 border-b bg-red-100 flex justify-between items-center">
+                    <div class="flex items-center">
+                        <span class="text-xl mr-2">🔴</span>
+                        <h3 class="font-bold text-red-700">ConectorRSS</h3>
+                    </div>
+                    <div class="p-1 rounded text-sm text-red-700 font-medium">
+                        ERROR
+                    </div>
+                </div>
+                
+                <div class="p-4 bg-white">
+                    <div class="mb-2">
+                        <div class="text-sm text-gray-600 mb-0.5">Último mensaje:</div>
+                        <div class="bg-gray-100 p-1 rounded text-xs">Falló conexión a API de feeds para fuentes: el_pais, el_mundo</div>
+                    </div>
+                    
+                    <div class="mb-2 flex items-center">
+                        <div class="text-sm text-gray-600 mr-2">Último heartbeat:</div>
+                        <div class="text-xs text-red-600 font-medium">hace 32 minutos ⚠️</div>
+                    </div>
+                    
+                    <div class="mb-2">
+                        <div class="text-sm text-gray-600 mb-0.5">Métricas principales:</div>
+                        <div class="space-y-1">
+                            <div class="flex items-center justify-between">
+                                <div class="text-xs">sites_checked:</div>
+                                <div class="text-xs font-medium">15</div>
+                            </div>
+                            <div class="flex items-center justify-between">
+                                <div class="text-xs">articles_found:</div>
+                                <div class="text-xs font-medium text-red-600">0 ⚠️</div>
+                            </div>
+                            <div class="flex items-center justify-between">
+                                <div class="text-xs">errors_count:</div>
+                                <div class="text-xs font-medium text-red-600">2 ⚠️</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="p-2 bg-gray-100 border-t flex space-x-2">
+                    <button class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-1 px-2 rounded text-sm">
+                        🔍 Diagnóstico
+                    </button>
+                    <button class="bg-gray-300 hover:bg-gray-400 text-gray-700 font-bold py-1 px-2 rounded text-sm">
+                        📊 Histórico
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <footer class="bg-gray-800 text-white p-4 mt-8">
+        <div class="container mx-auto text-center">
+            <p>Máquina de Noticias - Simulación Visual para Presentación</p>
+        </div>
+    </footer>
+</body>
+</html>

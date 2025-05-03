@@ -1,0 +1,602 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Máquina de Noticias - Ingesta de Documentos</title>
+    <!-- Tailwind CSS vía CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Estilos personalizados -->
+    <link rel="stylesheet" href="css/custom.css">
+</head>
+<body class="bg-gray-100">
+    <nav class="bg-blue-600 text-white p-4">
+        <div class="container mx-auto flex justify-between items-center">
+            <h1 class="text-xl font-bold">Máquina de Noticias</h1>
+            <ul class="flex space-x-4">
+                <li><a href="index.html" class="hover:underline">Inicio</a></li>
+                <li><a href="dashboard.html" class="hover:underline">Dashboard de Revisión</a></li>
+                <li><a href="chat.html" class="hover:underline">Chat de Investigación</a></li>
+                <li><a href="developer.html" class="hover:underline">Panel Desarrollador</a></li>
+                <li><a href="ingesta.html" class="font-bold underline">Ingesta de Documentos</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <div class="container mx-auto px-4 py-8">
+        <h1 class="text-3xl font-bold mb-8">Ingesta Manual de Documentos</h1>
+        
+        <!-- Selector de modalidad -->
+        <div class="flex border-b mb-8">
+            <button id="tab-document" class="p-2 px-4 border-b-2 border-blue-600 text-blue-600 font-medium">
+                Documento Completo
+            </button>
+            <button id="tab-text" class="p-2 px-4 text-gray-500 hover:text-gray-700">
+                Texto Directo
+            </button>
+        </div>
+        
+        <!-- Formulario de Documento Completo -->
+        <div id="form-document" class="bg-white rounded-lg shadow p-6 mb-8">
+            <div id="form-error" class="hidden bg-red-100 border border-red-400 text-red-700 p-4 rounded mb-4">
+                Error en el formulario. Por favor, revise los campos marcados.
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-4">
+                <!-- Título -->
+                <div class="md:col-span-2">
+                    <label class="block text-gray-700 font-bold mb-2">
+                        Título <span class="text-red-600">*</span>
+                    </label>
+                    <input
+                        type="text"
+                        id="documento-titulo"
+                        class="w-full border rounded p-2"
+                        placeholder="Título del documento"
+                        required
+                    >
+                </div>
+                
+                <!-- Autor -->
+                <div>
+                    <label class="block text-gray-700 font-bold mb-2">
+                        Autor/es
+                    </label>
+                    <input
+                        type="text"
+                        id="documento-autor"
+                        class="w-full border rounded p-2"
+                        placeholder="Nombre del autor o autores"
+                    >
+                </div>
+                
+                <!-- Tipo de documento -->
+                <div>
+                    <label class="block text-gray-700 font-bold mb-2">
+                        Tipo de documento <span class="text-red-600">*</span>
+                    </label>
+                    <select
+                        id="documento-tipo"
+                        class="w-full border rounded p-2"
+                        required
+                    >
+                        <option value="libro">Libro</option>
+                        <option value="paper">Paper académico</option>
+                        <option value="ley">Ley o normativa</option>
+                        <option value="tratado">Tratado</option>
+                        <option value="informe">Informe técnico</option>
+                        <option value="manual">Manual</option>
+                        <option value="otro">Otro</option>
+                    </select>
+                </div>
+                
+                <!-- Fecha de publicación -->
+                <div>
+                    <label class="block text-gray-700 font-bold mb-2">
+                        Fecha de publicación
+                    </label>
+                    <input
+                        type="date"
+                        id="documento-fecha"
+                        class="w-full border rounded p-2"
+                    >
+                </div>
+                
+                <!-- Editorial -->
+                <div>
+                    <label class="block text-gray-700 font-bold mb-2">
+                        Editorial
+                    </label>
+                    <input
+                        type="text"
+                        id="documento-editorial"
+                        class="w-full border rounded p-2"
+                        placeholder="Editorial o publicador"
+                    >
+                </div>
+                
+                <!-- ISBN (visible solo para libros) -->
+                <div id="isbn-container">
+                    <label class="block text-gray-700 font-bold mb-2">
+                        ISBN
+                    </label>
+                    <input
+                        type="text"
+                        id="documento-isbn"
+                        class="w-full border rounded p-2"
+                        placeholder="ISBN del libro"
+                    >
+                </div>
+            </div>
+            
+            <!-- Campos disciplinares -->
+            <div class="mb-4">
+                <label class="block text-gray-700 font-bold mb-2">
+                    Campos disciplinares
+                </label>
+                <div class="flex">
+                    <input
+                        type="text"
+                        id="documento-campo"
+                        class="flex-1 border rounded-l p-2"
+                        placeholder="Agregar campo disciplinar"
+                    >
+                    <button
+                        type="button"
+                        id="agregar-campo"
+                        class="bg-blue-600 hover:bg-blue-700 text-white font-bold px-4 rounded-r"
+                    >
+                        +
+                    </button>
+                </div>
+                <div id="campos-tags" class="flex flex-wrap mt-2">
+                    <!-- Tags dinámicos -->
+                </div>
+            </div>
+            
+            <!-- Selector de archivo -->
+            <div class="mb-6">
+                <label class="block text-gray-700 font-bold mb-2">
+                    Documento <span class="text-red-600">*</span>
+                </label>
+                <div class="border-2 border-dashed border-gray-300 rounded p-6 text-center">
+                    <input
+                        type="file"
+                        class="hidden"
+                        id="file-upload"
+                        accept=".pdf,.docx,.txt"
+                    >
+                    <label
+                        for="file-upload"
+                        class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded inline-block mb-2 cursor-pointer"
+                    >
+                        Seleccionar Archivo
+                    </label>
+                    <div class="text-sm text-gray-500">
+                        Formatos soportados: PDF, DOCX, TXT
+                    </div>
+                    
+                    <div id="file-info" class="hidden mt-4 text-left bg-gray-100 p-2 rounded">
+                        <div class="text-base font-medium">Archivo seleccionado:</div>
+                        <div class="text-sm">
+                            <div>Nombre: <span id="file-name"></span></div>
+                            <div>Tamaño: <span id="file-size"></span> MB</div>
+                            <div>
+                                Formato: 
+                                <span id="file-format" class="text-green-600">
+                                    PDF ✓
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div>
+                <button
+                    id="procesar-documento"
+                    class="bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-4 rounded w-full"
+                >
+                    PROCESAR
+                </button>
+            </div>
+        </div>
+        
+        <!-- Formulario de Texto Directo -->
+        <div id="form-text" class="bg-white rounded-lg shadow p-6 mb-8 hidden">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-4">
+                <!-- Título -->
+                <div class="md:col-span-2">
+                    <label class="block text-gray-700 font-bold mb-2">
+                        Título <span class="text-red-600">*</span>
+                    </label>
+                    <input
+                        type="text"
+                        id="texto-titulo"
+                        class="w-full border rounded p-2"
+                        placeholder="Título del texto"
+                        required
+                    >
+                </div>
+                
+                <!-- Autor -->
+                <div>
+                    <label class="block text-gray-700 font-bold mb-2">
+                        Autor/es
+                    </label>
+                    <input
+                        type="text"
+                        id="texto-autor"
+                        class="w-full border rounded p-2"
+                        placeholder="Nombre del autor o autores"
+                    >
+                </div>
+                
+                <!-- Tipo de texto -->
+                <div>
+                    <label class="block text-gray-700 font-bold mb-2">
+                        Tipo de texto <span class="text-red-600">*</span>
+                    </label>
+                    <select
+                        id="texto-tipo"
+                        class="w-full border rounded p-2"
+                        required
+                    >
+                        <option value="libro">Libro</option>
+                        <option value="paper">Paper académico</option>
+                        <option value="ley">Ley o normativa</option>
+                        <option value="tratado">Tratado</option>
+                        <option value="informe">Informe técnico</option>
+                        <option value="manual">Manual</option>
+                        <option value="otro">Otro</option>
+                    </select>
+                </div>
+            </div>
+            
+            <!-- Campos disciplinares -->
+            <div class="mb-4">
+                <label class="block text-gray-700 font-bold mb-2">
+                    Campos disciplinares
+                </label>
+                <div class="flex">
+                    <input
+                        type="text"
+                        id="texto-campo"
+                        class="flex-1 border rounded-l p-2"
+                        placeholder="Agregar campo disciplinar"
+                    >
+                    <button
+                        type="button"
+                        id="agregar-campo-texto"
+                        class="bg-blue-600 hover:bg-blue-700 text-white font-bold px-4 rounded-r"
+                    >
+                        +
+                    </button>
+                </div>
+                <div id="campos-tags-texto" class="flex flex-wrap mt-2">
+                    <!-- Tags dinámicos -->
+                </div>
+            </div>
+            
+            <!-- Editor de texto -->
+            <div class="mb-6">
+                <label class="block text-gray-700 font-bold mb-2">
+                    Contenido <span class="text-red-600">*</span>
+                </label>
+                <textarea
+                    id="texto-contenido"
+                    class="w-full border rounded p-2"
+                    rows="15"
+                    placeholder="Pegue o escriba aquí el texto a procesar..."
+                    required
+                ></textarea>
+            </div>
+            
+            <div>
+                <button
+                    id="procesar-texto"
+                    class="bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-4 rounded w-full"
+                >
+                    PROCESAR
+                </button>
+            </div>
+        </div>
+        
+        <!-- Sección de procesamiento (aparece al hacer clic en procesar) -->
+        <div id="processing-section" class="hidden">
+            <div id="processing-indicator" class="bg-white rounded-lg shadow text-center p-8">
+                <div class="flex justify-center items-center mb-4">
+                    <svg class="animate-spin h-8 w-8 text-blue-600 mr-3" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                        <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                        <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                    </svg>
+                    <span class="text-lg">Procesando documento...</span>
+                </div>
+                <p class="text-sm text-gray-500">
+                    El análisis puede tomar varios minutos dependiendo del tamaño y complejidad del documento.
+                </p>
+            </div>
+            
+            <div id="processing-result" class="hidden border-l-4 p-4 mb-4">
+                <div class="flex items-start">
+                    <div id="result-icon" class="flex-shrink-0">
+                        <!-- Icono dinámico de éxito/error -->
+                    </div>
+                    <div class="ml-3">
+                        <h3 id="result-title" class="text-lg font-medium">
+                            <!-- Título dinámico -->
+                        </h3>
+                        <div id="result-message" class="mt-2 text-sm">
+                            <!-- Mensaje dinámico -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <footer class="bg-gray-800 text-white p-4 mt-8">
+        <div class="container mx-auto text-center">
+            <p>Máquina de Noticias - Simulación Visual para Presentación</p>
+        </div>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Tabs de modalidad
+            const tabDocument = document.getElementById('tab-document');
+            const tabText = document.getElementById('tab-text');
+            const formDocument = document.getElementById('form-document');
+            const formText = document.getElementById('form-text');
+            
+            tabDocument.addEventListener('click', function() {
+                tabDocument.classList.add('border-b-2', 'border-blue-600', 'text-blue-600', 'font-medium');
+                tabDocument.classList.remove('text-gray-500');
+                tabText.classList.remove('border-b-2', 'border-blue-600', 'text-blue-600', 'font-medium');
+                tabText.classList.add('text-gray-500');
+                
+                formDocument.classList.remove('hidden');
+                formText.classList.add('hidden');
+            });
+            
+            tabText.addEventListener('click', function() {
+                tabText.classList.add('border-b-2', 'border-blue-600', 'text-blue-600', 'font-medium');
+                tabText.classList.remove('text-gray-500');
+                tabDocument.classList.remove('border-b-2', 'border-blue-600', 'text-blue-600', 'font-medium');
+                tabDocument.classList.add('text-gray-500');
+                
+                formText.classList.remove('hidden');
+                formDocument.classList.add('hidden');
+            });
+            
+            // Gestión de campos disciplinares (formulario documento)
+            const campoInput = document.getElementById('documento-campo');
+            const agregarCampoBtn = document.getElementById('agregar-campo');
+            const camposTags = document.getElementById('campos-tags');
+            
+            agregarCampoBtn.addEventListener('click', function() {
+                const campo = campoInput.value.trim();
+                if (campo) {
+                    // Verificar si ya existe
+                    const camposExistentes = Array.from(camposTags.querySelectorAll('.tag-text')).map(el => el.textContent);
+                    if (!camposExistentes.includes(campo)) {
+                        // Crear tag
+                        const tag = document.createElement('div');
+                        tag.className = 'tag tag-blue flex items-center';
+                        tag.innerHTML = `
+                            <span class="tag-text">${campo}</span>
+                            <button
+                                type="button"
+                                class="ml-1 text-blue-800 hover:text-blue-900 remove-tag"
+                            >
+                                ×
+                            </button>
+                        `;
+                        
+                        // Añadir event listener para eliminar
+                        tag.querySelector('.remove-tag').addEventListener('click', function() {
+                            tag.remove();
+                        });
+                        
+                        camposTags.appendChild(tag);
+                        campoInput.value = '';
+                    }
+                }
+            });
+            
+            // Enter para agregar campo
+            campoInput.addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    e.preventDefault();
+                    agregarCampoBtn.click();
+                }
+            });
+            
+            // Gestión de campos disciplinares (formulario texto)
+            const campoTextoInput = document.getElementById('texto-campo');
+            const agregarCampoTextoBtn = document.getElementById('agregar-campo-texto');
+            const camposTagsTexto = document.getElementById('campos-tags-texto');
+            
+            agregarCampoTextoBtn.addEventListener('click', function() {
+                const campo = campoTextoInput.value.trim();
+                if (campo) {
+                    // Verificar si ya existe
+                    const camposExistentes = Array.from(camposTagsTexto.querySelectorAll('.tag-text')).map(el => el.textContent);
+                    if (!camposExistentes.includes(campo)) {
+                        // Crear tag
+                        const tag = document.createElement('div');
+                        tag.className = 'tag tag-blue flex items-center';
+                        tag.innerHTML = `
+                            <span class="tag-text">${campo}</span>
+                            <button
+                                type="button"
+                                class="ml-1 text-blue-800 hover:text-blue-900 remove-tag"
+                            >
+                                ×
+                            </button>
+                        `;
+                        
+                        // Añadir event listener para eliminar
+                        tag.querySelector('.remove-tag').addEventListener('click', function() {
+                            tag.remove();
+                        });
+                        
+                        camposTagsTexto.appendChild(tag);
+                        campoTextoInput.value = '';
+                    }
+                }
+            });
+            
+            // Enter para agregar campo
+            campoTextoInput.addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    e.preventDefault();
+                    agregarCampoTextoBtn.click();
+                }
+            });
+            
+            // Gestión de archivos
+            const fileUpload = document.getElementById('file-upload');
+            const fileInfo = document.getElementById('file-info');
+            const fileName = document.getElementById('file-name');
+            const fileSize = document.getElementById('file-size');
+            const fileFormat = document.getElementById('file-format');
+            
+            fileUpload.addEventListener('change', function() {
+                if (fileUpload.files.length > 0) {
+                    const file = fileUpload.files[0];
+                    
+                    // Mostrar información del archivo
+                    fileName.textContent = file.name;
+                    fileSize.textContent = (file.size / 1024 / 1024).toFixed(2);
+                    
+                    // Validar formato
+                    const validFormats = ['.pdf', '.docx', '.txt', 'application/pdf', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document', 'text/plain'];
+                    const extension = file.name.substring(file.name.lastIndexOf('.')).toLowerCase();
+                    const isValidFormat = validFormats.includes(file.type) || validFormats.includes(extension);
+                    
+                    if (isValidFormat) {
+                        fileFormat.className = 'text-green-600';
+                        fileFormat.innerHTML = `${file.type || extension} ✓`;
+                    } else {
+                        fileFormat.className = 'text-red-600';
+                        fileFormat.innerHTML = `${file.type || extension} ✗`;
+                    }
+                    
+                    fileInfo.classList.remove('hidden');
+                }
+            });
+            
+            // Botones de procesamiento
+            const procesarDocumentoBtn = document.getElementById('procesar-documento');
+            const procesarTextoBtn = document.getElementById('procesar-texto');
+            const processingSection = document.getElementById('processing-section');
+            const processingIndicator = document.getElementById('processing-indicator');
+            const processingResult = document.getElementById('processing-result');
+            const resultIcon = document.getElementById('result-icon');
+            const resultTitle = document.getElementById('result-title');
+            const resultMessage = document.getElementById('result-message');
+            
+            procesarDocumentoBtn.addEventListener('click', function() {
+                // Validación simple
+                const titulo = document.getElementById('documento-titulo').value.trim();
+                if (!titulo) {
+                    alert('El título es obligatorio');
+                    return;
+                }
+                
+                if (!fileUpload.files.length) {
+                    alert('Debe seleccionar un archivo');
+                    return;
+                }
+                
+                // Mostrar indicador de procesamiento
+                processingSection.classList.remove('hidden');
+                processingIndicator.classList.remove('hidden');
+                processingResult.classList.add('hidden');
+                
+                // Desplazamiento al indicador
+                processingSection.scrollIntoView({ behavior: 'smooth' });
+                
+                // Simular procesamiento (3 segundos)
+                setTimeout(function() {
+                    // Ocultar indicador y mostrar resultado
+                    processingIndicator.classList.add('hidden');
+                    processingResult.classList.remove('hidden');
+                    
+                    // Configurar mensaje de éxito
+                    processingResult.className = 'border-l-4 p-4 mb-4 bg-green-50 border-green-500';
+                    resultIcon.innerHTML = `
+                        <svg class="h-5 w-5 text-green-600" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
+                        </svg>
+                    `;
+                    resultTitle.innerHTML = 'Procesamiento completo';
+                    resultTitle.className = 'text-lg font-medium text-green-600';
+                    resultMessage.innerHTML = `
+                        <p>El documento ha sido procesado correctamente.</p>
+                        <p class="mt-1">
+                            Se extrajeron <strong>12</strong> conceptos del documento.
+                        </p>
+                    `;
+                    resultMessage.className = 'mt-2 text-sm text-green-700';
+                    
+                    // Desplazamiento al resultado
+                    processingResult.scrollIntoView({ behavior: 'smooth' });
+                }, 3000);
+            });
+            
+            procesarTextoBtn.addEventListener('click', function() {
+                // Validación simple
+                const titulo = document.getElementById('texto-titulo').value.trim();
+                const contenido = document.getElementById('texto-contenido').value.trim();
+                
+                if (!titulo) {
+                    alert('El título es obligatorio');
+                    return;
+                }
+                
+                if (!contenido) {
+                    alert('El contenido de texto es obligatorio');
+                    return;
+                }
+                
+                // Mostrar indicador de procesamiento
+                processingSection.classList.remove('hidden');
+                processingIndicator.classList.remove('hidden');
+                processingResult.classList.add('hidden');
+                
+                // Desplazamiento al indicador
+                processingSection.scrollIntoView({ behavior: 'smooth' });
+                
+                // Simular procesamiento (2 segundos)
+                setTimeout(function() {
+                    // Ocultar indicador y mostrar resultado
+                    processingIndicator.classList.add('hidden');
+                    processingResult.classList.remove('hidden');
+                    
+                    // Configurar mensaje de éxito
+                    processingResult.className = 'border-l-4 p-4 mb-4 bg-green-50 border-green-500';
+                    resultIcon.innerHTML = `
+                        <svg class="h-5 w-5 text-green-600" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
+                        </svg>
+                    `;
+                    resultTitle.innerHTML = 'Procesamiento completo';
+                    resultTitle.className = 'text-lg font-medium text-green-600';
+                    resultMessage.innerHTML = `
+                        <p>El texto ha sido procesado correctamente.</p>
+                        <p class="mt-1">
+                            Se extrajeron <strong>8</strong> conceptos del texto.
+                        </p>
+                    `;
+                    resultMessage.className = 'mt-2 text-sm text-green-700';
+                    
+                    // Desplazamiento al resultado
+                    processingResult.scrollIntoView({ behavior: 'smooth' });
+                }, 2000);
+            });
+        });
+    </script>
+</body>
+</html>
