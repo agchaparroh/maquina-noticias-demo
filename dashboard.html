@@ -1,648 +1,258 @@
-// dashboard.js - Lógica para el Dashboard de Revisión
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Máquina de Noticias - Dashboard de Revisión</title>
+    <!-- Tailwind CSS vía CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Estilos personalizados -->
+    <link rel="stylesheet" href="css/custom.css">
+</head>
+<body class="bg-gray-100">
+    <nav class="bg-blue-600 text-white p-4">
+        <div class="container mx-auto flex justify-between items-center">
+            <h1 class="text-xl font-bold">Máquina de Noticias</h1>
+            <ul class="flex space-x-4">
+                <li><a href="index.html" class="hover:underline">Inicio</a></li>
+                <li><a href="dashboard.html" class="font-bold underline">Dashboard de Revisión</a></li>
+                <li><a href="chat.html" class="hover:underline">Chat de Investigación</a></li>
+                <li><a href="developer.html" class="hover:underline">Panel Desarrollador</a></li>
+                <li><a href="ingesta.html" class="hover:underline">Ingesta de Documentos</a></li>
+            </ul>
+        </div>
+    </nav>
 
-// Estado global de la aplicación
-const state = {
-    hilosNarrativos: [],
-    hechosSinHilo: [],
-    articulosProblemas: [],
-    paginaActual: 1,
-    porPagina: 20,
-    totalPaginas: 0,
-    selectedHecho: null,
-    draggedElement: null,
-    paisesTags: [],
-    etiquetasTags: []
-};
-
-// Función principal de inicialización
-document.addEventListener('DOMContentLoaded', function() {
-    // Obtener datos simulados
-    state.hilosNarrativos = mockData.hilosNarrativos.slice(); // Copia para manipular
-    state.hechosSinHilo = mockData.hechosSinHilo.slice();
-    state.articulosProblemas = mockData.articulosProblemas.slice();
-    
-    // Actualizar contadores
-    document.getElementById('problemas-count').textContent = state.articulosProblemas.length;
-    
-    // Calcular total de páginas
-    state.totalPaginas = Math.ceil(state.hechos?.length || 0 / state.porPagina);
-    
-    // Inicializar componentes
-    initFilters();
-    initPanelProblemas();
-    renderHilosNarrativos();
-    renderHechosSinHilo();
-    setupDragAndDrop();
-    setupModals();
-});
-
-// Inicializar filtros
-function initFilters() {
-    const toggleFilters = document.getElementById('toggle-filters');
-    const filtersContent = document.getElementById('filters-content');
-    const filtersArrow = document.getElementById('filters-arrow');
-    const aplicarFiltros = document.getElementById('aplicar-filtros');
-    
-    toggleFilters.addEventListener('click', () => {
-        filtersContent.classList.toggle('hidden');
-        filtersArrow.classList.toggle('rotate-180');
-    });
-    
-    aplicarFiltros.addEventListener('click', () => {
-        // En una implementación real, aplicaría los filtros
-        showToast('Filtros aplicados');
-    });
-}
-
-// Inicializar panel de problemas
-function initPanelProblemas() {
-    const toggleProblemas = document.getElementById('toggle-problemas');
-    const problemasContent = document.getElementById('problemas-content');
-    const problemasArrow = document.getElementById('problemas-arrow');
-    
-    toggleProblemas.addEventListener('click', () => {
-        problemasContent.classList.toggle('hidden');
-        problemasArrow.classList.toggle('rotate-180');
-    });
-    
-    // Ocultar panel por defecto
-    problemasContent.classList.add('hidden');
-    problemasArrow.classList.add('rotate-180');
-}
-
-// Renderizar artículos con problemas
-function renderProblemas() {
-    const problemasList = document.getElementById('problemas-list');
-    problemasList.innerHTML = '';
-    
-    state.articulosProblemas.forEach(problema => {
-        const problemContainer = document.createElement('div');
-        problemContainer.className = 'problem-item';
+    <div class="container mx-auto px-4 py-8">
+        <h1 class="text-3xl font-bold mb-8">Dashboard de Revisión</h1>
         
-        problemContainer.innerHTML = `
-            <div>
-                <div class="font-medium">${problema.titular}</div>
-                <div class="text-sm text-gray-600">${problema.medio} - ${problema.fecha}</div>
-                <div class="text-sm text-red-600">${problema.estado}: ${problema.error}</div>
-            </div>
-            <button onclick="window.open('${problema.url}', '_blank')" 
-                class="view-button">
-                VER
+        <!-- Filtros (Colapsable) -->
+        <div id="filter-panel" class="bg-white rounded-lg shadow mb-6">
+            <button id="toggle-filters" class="w-full p-4 flex justify-between items-center border-b focus:outline-none">
+                <span class="text-lg font-bold">Filtros</span>
+                <svg class="w-5 h-5 transform transition-transform" id="filters-arrow" fill="currentColor" viewBox="0 0 20 20">
+                    <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" />
+                </svg>
             </button>
-        `;
+            
+            <div id="filters-content" class="p-4 hidden">
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-4">
+                    <div>
+                        <label class="block text-sm font-medium mb-2">Período</label>
+                        <select id="periodo-filter" class="border rounded p-2 w-full">
+                            <option value="ultimas-24h">Últimas 24h</option>
+                            <option value="ultimos-3-dias">Últimos 3 días</option>
+                            <option value="semana-pasada">Semana pasada</option>
+                            <option value="personalizado">Rango personalizado</option>
+                        </select>
+                    </div>
+                    
+                    <div>
+                        <label class="block text-sm font-medium mb-2">Ordenar por</label>
+                        <select id="orden-filter" class="border rounded p-2 w-full">
+                            <option value="relevancia">Relevancia</option>
+                            <option value="fecha_reciente">Fecha reciente</option>
+                            <option value="actividad">Actividad del hilo</option>
+                        </select>
+                    </div>
+                    
+                    <div>
+                        <button id="aplicar-filtros" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded w-full">
+                            Aplicar Filtros
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+            <button id="toggle-filters" class="w-full p-4 flex justify-between items-center border-b focus:outline-none">
+                <span class="text-lg font-bold">Filtros</span>
+                <svg class="w-5 h-5 transform transition-transform" id="filters-arrow" fill="currentColor" viewBox="0 0 20 20">
+                    <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" />
+                </svg>
+            </button>
+            
+            <div id="filters-content" class="p-4 hidden">
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-4">
+                    <div>
+                        <label class="block text-sm font-medium mb-2">Período</label>
+                        <select id="periodo-filter" class="border rounded p-2 w-full">
+                            <option value="ultimas-24h">Últimas 24h</option>
+                            <option value="ultimos-3-dias">Últimos 3 días</option>
+                            <option value="semana-pasada">Semana pasada</option>
+                            <option value="personalizado">Rango personalizado</option>
+                        </select>
+                    </div>
+                    
+                    <div>
+                        <label class="block text-sm font-medium mb-2">Ordenar por</label>
+                        <select id="orden-filter" class="border rounded p-2 w-full">
+                            <option value="relevancia">Relevancia</option>
+                            <option value="fecha_reciente">Fecha reciente</option>
+                            <option value="actividad">Actividad del hilo</option>
+                        </select>
+                    </div>
+                    
+                    <div>
+                        <button id="aplicar-filtros" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded w-full">
+                            Aplicar Filtros
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
         
-        problemasList.appendChild(problemContainer);
-    });
-}
-
-// Renderizar hilos narrativos
-function renderHilosNarrativos() {
-    const container = document.getElementById('hilos-narrativos-container');
-    container.innerHTML = '';
-    
-    state.hilosNarrativos.forEach((hilo, index) => {
-        const hiloBlock = createHiloBlock(hilo, index);
-        container.appendChild(hiloBlock);
-    });
-}
-
-// Crear bloque de hilo narrativo
-function createHiloBlock(hilo, index) {
-    const block = document.createElement('div');
-    block.className = 'bg-white rounded-lg shadow border border-gray-200 overflow-hidden thread-block';
-    block.dataset.hiloId = hilo.id;
-    block.dataset.index = index;
-    
-    // Header con drag handle y relevancia
-    const header = document.createElement('div');
-    header.className = 'bg-gray-50 p-4 border-b flex justify-between items-center';
-    
-    const titleAndDrag = document.createElement('div');
-    titleAndDrag.className = 'flex items-center';
-    
-    const dragHandle = document.createElement('div');
-    dragHandle.className = 'thread-handle';
-    dragHandle.innerHTML = '☰';
-    dragHandle.addEventListener('dblclick', () => openRelevanceModal(hilo.id, hilo.relevancia));
-    
-    const title = document.createElement('h3');
-    title.className = 'thread-title text-lg';
-    title.textContent = `[${hilo.titulo}]`;
-    
-    titleAndDrag.appendChild(dragHandle);
-    titleAndDrag.appendChild(title);
-    
-    const relevanceIndicator = document.createElement('div');
-    relevanceIndicator.className = 'text-sm text-gray-600';
-    relevanceIndicator.textContent = `${hilo.relevancia}/10`;
-    
-    header.appendChild(titleAndDrag);
-    header.appendChild(relevanceIndicator);
-    
-    // Titular principal
-    const mainHeadline = document.createElement('div');
-    mainHeadline.className = 'p-4 main-headline';
-    mainHeadline.textContent = hilo.titular_principal;
-    
-    // Lista de hechos
-    const factsList = document.createElement('div');
-    factsList.className = 'px-4 space-y-2';
-    
-    hilo.hechos.forEach(hecho => {
-        const factItem = document.createElement('div');
-        factItem.className = 'text-sm flex justify-between items-center';
+        <!-- Panel de Artículos con Problemas (Colapsable) -->
+        <div id="articulos-problemas" class="bg-white rounded-lg shadow mb-8">
+            <button id="toggle-problemas" class="w-full p-4 flex justify-between items-center border-b focus:outline-none">
+                <span class="text-lg text-red-600 flex items-center">
+                    <svg class="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                        <path fill-rule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clip-rule="evenodd" />
+                    </svg>
+                    Artículos con Problemas (<span id="problemas-count">3</span>)
+                </span>
+                <svg class="w-5 h-5 transform transition-transform" id="problemas-arrow" fill="currentColor" viewBox="0 0 20 20">
+                    <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" />
+                </svg>
+            </button>
+            
+            <div id="problemas-content" class="p-4 hidden">
+                <div class="space-y-3" id="problemas-list">
+                    <!-- Contenido dinámico -->
+                </div>
+            </div>
+        </div>
         
-        const factContent = document.createElement('div');
-        factContent.className = 'flex items-center';
+        <!-- Bloques de Hilos Narrativos -->
+        <div id="hilos-narrativos-container" class="space-y-8">
+            <!-- Contenido dinámico generado por JavaScript -->
+        </div>
         
-        const factText = document.createElement('span');
-        factText.className = 'fact-text cursor-pointer';
-        factText.textContent = hecho.contenido;
-        factText.addEventListener('click', () => openHechoDetalle(hecho));
-        
-        factContent.appendChild(factText);
-        
-        const factDate = document.createElement('div');
-        factDate.className = 'text-xs text-gray-500';
-        factDate.textContent = formatDate(hecho.fecha);
-        
-        factItem.appendChild(factContent);
-        factItem.appendChild(factDate);
-        
-        factsList.appendChild(factItem);
-    });
+        <!-- Hechos Sin Hilo -->
+        <div id="hechos-sin-hilo" class="mt-12">
+            <h2 class="text-xl font-bold mb-4">Hechos sin Hilo Narrativo</h2>
+            <div id="hechos-sin-hilo-list" class="space-y-4">
+                <!-- Contenido dinámico -->
+            </div>
+        </div>
+    </div>
     
-    // Footer con fuentes y países
-    const footer = document.createElement('div');
-    footer.className = 'p-4 border-t flex justify-between items-center';
+    <!-- Modal Vincular a Hilo -->
+    <div id="vincular-hilo-modal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden">
+        <div class="bg-white rounded-lg w-96 shadow-lg">
+            <div class="p-4 border-b font-bold">Vincular a Hilo Narrativo</div>
+            
+            <div class="p-4">
+                <div class="mb-4">
+                    <label class="block text-sm font-medium mb-2">Buscar Hilo</label>
+                    <input type="text" id="buscar-hilo" class="w-full border rounded p-2" placeholder="Buscar hilos...">
+                </div>
+                
+                <div class="max-h-48 overflow-y-auto mb-4" id="hilos-lista">
+                    <!-- Lista dinámica de hilos -->
+                </div>
+                
+                <div class="text-sm text-gray-500 mb-4">O crear nuevo hilo</div>
+                <button id="crear-nuevo-hilo" class="bg-blue-600 text-white font-bold py-2 px-4 rounded w-full">
+                    + Crear Nuevo Hilo
+                </button>
+            </div>
+            
+            <div class="p-4 border-t">
+                <button id="cancelar-vinculacion" class="bg-gray-300 text-gray-800 font-bold py-2 px-4 rounded">
+                    Cancelar
+                </button>
+            </div>
+        </div>
+    </div>
     
-    const countries = document.createElement('div');
-    countries.className = 'flex gap-2';
-    hilo.paises.forEach(pais => {
-        const tag = document.createElement('span');
-        tag.className = 'country-tag';
-        tag.textContent = `[${pais}]`;
-        countries.appendChild(tag);
-    });
+    <!-- Modal Crear Nuevo Hilo -->
+    <div id="crear-hilo-modal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden">
+        <div class="bg-white rounded-lg w-96 shadow-lg">
+            <div class="p-4 border-b font-bold">Crear Nuevo Hilo Narrativo</div>
+            
+            <div class="p-4">
+                <div class="mb-4">
+                    <label class="block text-sm font-medium mb-2">Título del Hilo</label>
+                    <input type="text" id="hilo-titulo" class="w-full border rounded p-2" placeholder="Ej: Conflicto entre FARC y ELN">
+                </div>
+                
+                <div class="mb-4">
+                    <label class="block text-sm font-medium mb-2">Etiquetas</label>
+                    <input type="text" id="hilo-etiquetas" class="w-full border rounded p-2" placeholder="Separadas por comas">
+                </div>
+                
+                <div class="mb-4">
+                    <label class="block text-sm font-medium mb-2">Relevancia Editorial</label>
+                    <div class="flex items-center">
+                        <input type="range" class="relevance-slider flex-1" id="hilo-relevancia" min="1" max="10" value="5">
+                        <span id="hilo-relevancia-valor" class="ml-4 text-sm font-medium">5/10</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="p-4 border-t flex justify-end space-x-2">
+                <button id="cancelar-crear-hilo" class="bg-gray-300 text-gray-800 font-bold py-2 px-4 rounded">
+                    Cancelar
+                </button>
+                <button id="guardar-nuevo-hilo" class="bg-blue-600 text-white font-bold py-2 px-4 rounded">
+                    Crear
+                </button>
+            </div>
+        </div>
+    </div>
     
-    const sourcesButton = document.createElement('button');
-    sourcesButton.className = 'sources-button';
-    sourcesButton.textContent = `Menciones: ${getTotalMentions(hilo.fuentes)} fuentes`;
-    sourcesButton.addEventListener('click', () => showSources(hilo.fuentes));
+    <!-- Modal Detalle de Hecho -->
+    <div id="detalle-hecho-modal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden">
+        <div class="bg-white rounded-lg w-3/4 max-w-4xl shadow-lg">
+            <div class="p-4 border-b font-bold">Detalle del Hecho</div>
+            
+            <div class="p-4">
+                <div class="mb-4">
+                    <h3 class="text-lg font-bold mb-2" id="detalle-titulo">Título del Hecho</h3>
+                    <p class="text-gray-700" id="detalle-contenido">Contenido del hecho...</p>
+                </div>
+                
+                <div class="mb-4">
+                    <h4 class="font-bold mb-2">Fuente:</h4>
+                    <p id="detalle-fuente" class="text-gray-700">Medio - Título del artículo</p>
+                    <a id="detalle-url" href="#" target="_blank" class="text-blue-600 hover:underline">Ver artículo original →</a>
+                </div>
+                
+                <div class="mb-4">
+                    <h4 class="font-bold mb-2">Importancia:</h4>
+                    <div class="flex items-center">
+                        <input type="range" class="relevance-slider flex-1" id="hecho-importancia" min="1" max="10" value="7">
+                        <span id="hecho-importancia-valor" class="ml-4 text-sm font-medium">7/10</span>
+                    </div>
+                </div>
+                
+                <div class="mb-4">
+                    <h4 class="font-bold mb-2">Vinculado a:</h4>
+                    <div id="hilos-vinculados" class="flex flex-wrap gap-2">
+                        <!-- Enlaces a hilos vinculados -->
+                    </div>
+                    <button id="modificar-vinculacion" class="bg-blue-100 text-blue-600 px-3 py-1 rounded text-sm mt-2">
+                        + Gestionar Vinculaciones
+                    </button>
+                </div>
+            </div>
+            
+            <div class="p-4 border-t">
+                <button id="cerrar-detalle" class="bg-gray-300 text-gray-800 font-bold py-2 px-4 rounded">
+                    Cerrar
+                </button>
+            </div>
+        </div>
+    </div>
     
-    footer.appendChild(countries);
-    footer.appendChild(sourcesButton);
+    <footer class="bg-gray-800 text-white p-4 mt-8">
+        <div class="container mx-auto text-center">
+            <p>Máquina de Noticias - Simulación Visual para Presentación</p>
+        </div>
+    </footer>
     
-    // Construir el bloque
-    block.appendChild(header);
-    block.appendChild(mainHeadline);
-    block.appendChild(factsList);
-    block.appendChild(footer);
-    
-    return block;
-}
-
-// Renderizar hechos sin hilo
-function renderHechosSinHilo() {
-    const container = document.getElementById('hechos-sin-hilo-list');
-    container.innerHTML = '';
-    
-    state.hechosSinHilo.forEach(hecho => {
-        const factCard = createFactCard(hecho);
-        container.appendChild(factCard);
-    });
-}
-
-// Crear tarjeta de hecho
-function createFactCard(hecho) {
-    const card = document.createElement('div');
-    card.className = 'bg-white rounded-lg shadow p-4 border border-gray-200 fact-card';
-    
-    const header = document.createElement('div');
-    header.className = 'flex justify-between items-start mb-2';
-    
-    const content = document.createElement('div');
-    content.className = 'flex-1';
-    
-    const title = document.createElement('h4');
-    title.className = 'font-medium mb-1 cursor-pointer hover:text-blue-600';
-    title.textContent = hecho.contenido;
-    title.addEventListener('click', () => openHechoDetalle(hecho));
-    
-    const metadata = document.createElement('div');
-    metadata.className = 'text-sm text-gray-600';
-    metadata.textContent = `${hecho.medio} - ${formatDate(hecho.fecha)}`;
-    
-    content.appendChild(title);
-    content.appendChild(metadata);
-    
-    const importance = document.createElement('div');
-    importance.className = 'text-sm font-medium';
-    importance.textContent = `${hecho.importancia}/10`;
-    
-    header.appendChild(content);
-    header.appendChild(importance);
-    
-    const vinculationSection = document.createElement('div');
-    vinculationSection.className = 'mt-4';
-    
-    const vinculationLabel = document.createElement('div');
-    vinculationLabel.className = 'text-sm text-gray-600 mb-2';
-    vinculationLabel.textContent = 'Vinculado a:';
-    
-    const vinculationButton = document.createElement('button');
-    vinculationButton.className = 'bg-blue-100 text-blue-600 px-3 py-1 rounded-full text-sm';
-    vinculationButton.textContent = '+ Vincular a Hilo';
-    vinculationButton.addEventListener('click', () => openVincularModal(hecho));
-    
-    vinculationSection.appendChild(vinculationLabel);
-    vinculationSection.appendChild(vinculationButton);
-    
-    card.appendChild(header);
-    card.appendChild(vinculationSection);
-    
-    return card;
-}
-
-// Configurar drag and drop
-function setupDragAndDrop() {
-    const container = document.getElementById('hilos-narrativos-container');
-    
-    container.addEventListener('dragstart', function(e) {
-        const block = e.target.closest('.thread-block');
-        if (!block) return;
-        
-        state.draggedElement = block;
-        block.classList.add('dragging');
-        e.dataTransfer.effectAllowed = 'move';
-        e.dataTransfer.setData('text/plain', block.dataset.index);
-    });
-    
-    container.addEventListener('dragend', function(e) {
-        const block = e.target.closest('.thread-block');
-        if (!block) return;
-        
-        block.classList.remove('dragging');
-        state.draggedElement = null;
-    });
-    
-    container.addEventListener('dragover', function(e) {
-        e.preventDefault();
-        e.dataTransfer.dropEffect = 'move';
-        
-        const afterElement = getDragAfterElement(container, e.clientY);
-        const draggable = document.querySelector('.dragging');
-        
-        if (afterElement == null) {
-            container.appendChild(draggable);
-        } else {
-            container.insertBefore(draggable, afterElement);
-        }
-    });
-    
-    container.addEventListener('drop', function(e) {
-        e.preventDefault();
-        reorderHilos();
-    });
-    
-    // Hacer los bloques draggables
-    document.addEventListener('dragstart', function(e) {
-        if (e.target.closest('.thread-handle')) {
-            const block = e.target.closest('.thread-block');
-            if (block) {
-                block.setAttribute('draggable', 'true');
-            }
-        }
-    });
-}
-
-// Obtener elemento después de la posición del ratón
-function getDragAfterElement(container, y) {
-    const draggableElements = [...container.querySelectorAll('.thread-block:not(.dragging)')];
-    
-    return draggableElements.reduce((closest, child) => {
-        const box = child.getBoundingClientRect();
-        const offset = y - box.top - box.height / 2;
-        
-        if (offset < 0 && offset > closest.offset) {
-            return { offset: offset, element: child };
-        } else {
-            return closest;
-        }
-    }, { offset: Number.NEGATIVE_INFINITY }).element;
-}
-
-// Reordenar hilos
-function reorderHilos() {
-    const blocks = document.querySelectorAll('.thread-block');
-    const newOrder = [];
-    
-    blocks.forEach(block => {
-        const hiloId = parseInt(block.dataset.hiloId);
-        const hilo = state.hilosNarrativos.find(h => h.id === hiloId);
-        if (hilo) {
-            newOrder.push(hilo);
-        }
-    });
-    
-    state.hilosNarrativos = newOrder;
-    
-    // Actualizar relevancia basada en posición
-    state.hilosNarrativos.forEach((hilo, index) => {
-        const newRelevance = 10 - index;
-        hilo.relevancia = Math.max(1, Math.min(10, newRelevance));
-    });
-    
-    renderHilosNarrativos();
-}
-
-// Configurar modales
-function setupModals() {
-    // Modal vincular hilo
-    const vincularModal = document.getElementById('vincular-hilo-modal');
-    const cancelarVinculacion = document.getElementById('cancelar-vinculacion');
-    const crearNuevoHilo = document.getElementById('crear-nuevo-hilo');
-    
-    cancelarVinculacion.addEventListener('click', () => {
-        vincularModal.classList.add('hidden');
-    });
-    
-    crearNuevoHilo.addEventListener('click', () => {
-        vincularModal.classList.add('hidden');
-        openCrearHiloModal();
-    });
-    
-    // Modal crear hilo
-    const crearHiloModal = document.getElementById('crear-hilo-modal');
-    const cancelarCrearHilo = document.getElementById('cancelar-crear-hilo');
-    const guardarNuevoHilo = document.getElementById('guardar-nuevo-hilo');
-    const hiloRelevancia = document.getElementById('hilo-relevancia');
-    const hiloRelevanciaValor = document.getElementById('hilo-relevancia-valor');
-    
-    hiloRelevancia.addEventListener('input', () => {
-        hiloRelevanciaValor.textContent = `${hiloRelevancia.value}/10`;
-    });
-    
-    cancelarCrearHilo.addEventListener('click', () => {
-        crearHiloModal.classList.add('hidden');
-    });
-    
-    guardarNuevoHilo.addEventListener('click', () => {
-        createNewHilo();
-    });
-    
-    // Modal detalle de hecho
-    const detalleModal = document.getElementById('detalle-hecho-modal');
-    const cerrarDetalle = document.getElementById('cerrar-detalle');
-    const modificarVinculacion = document.getElementById('modificar-vinculacion');
-    const hechoImportancia = document.getElementById('hecho-importancia');
-    const hechoImportanciaValor = document.getElementById('hecho-importancia-valor');
-    
-    cerrarDetalle.addEventListener('click', () => {
-        detalleModal.classList.add('hidden');
-    });
-    
-    modificarVinculacion.addEventListener('click', () => {
-        detalleModal.classList.add('hidden');
-        openVincularModal(state.selectedHecho);
-    });
-    
-    hechoImportancia.addEventListener('input', () => {
-        hechoImportanciaValor.textContent = `${hechoImportancia.value}/10`;
-        if (state.selectedHecho) {
-            state.selectedHecho.importancia = parseInt(hechoImportancia.value);
-        }
-    });
-}
-
-// Abrir modal de relevancia
-function openRelevanceModal(hiloId, currentRelevance) {
-    // En una implementación real, esto abriría un modal para editar la relevancia
-    // Por ahora, solo mostramos un prompt
-    const newRelevance = prompt(`Relevancia actual: ${currentRelevance}/10\nIngresar nueva relevancia (1-10):`, currentRelevance);
-    
-    if (newRelevance && !isNaN(newRelevance)) {
-        const value = Math.max(1, Math.min(10, parseInt(newRelevance)));
-        const hilo = state.hilosNarrativos.find(h => h.id === hiloId);
-        if (hilo) {
-            hilo.relevancia = value;
-            renderHilosNarrativos();
-        }
-    }
-}
-
-// Abrir modal de vinculación
-function openVincularModal(hecho) {
-    const modal = document.getElementById('vincular-hilo-modal');
-    const hilosList = document.getElementById('hilos-lista');
-    const buscarHilo = document.getElementById('buscar-hilo');
-    
-    state.selectedHecho = hecho;
-    modal.classList.remove('hidden');
-    
-    // Renderizar lista de hilos
-    renderHilosList(buscarHilo.value);
-    
-    // Configurar búsqueda
-    buscarHilo.value = '';
-    buscarHilo.oninput = () => renderHilosList(buscarHilo.value);
-}
-
-// Renderizar lista de hilos para vincular
-function renderHilosList(searchTerm = '') {
-    const hilosList = document.getElementById('hilos-lista');
-    hilosList.innerHTML = '';
-    
-    const filteredHilos = mockData.hilosActivos.filter(hilo => 
-        hilo.titulo.toLowerCase().includes(searchTerm.toLowerCase())
-    );
-    
-    if (filteredHilos.length === 0) {
-        hilosList.innerHTML = '<div class="text-center text-gray-500 p-4">No se encontraron hilos</div>';
-        return;
-    }
-    
-    filteredHilos.forEach(hilo => {
-        const hiloItem = document.createElement('div');
-        hiloItem.className = 'dropdown-item flex justify-between items-center';
-        
-        const hiloInfo = document.createElement('div');
-        hiloInfo.className = 'font-medium';
-        hiloInfo.textContent = hilo.titulo;
-        
-        const relevanceBadge = document.createElement('span');
-        relevanceBadge.className = 'bg-gray-100 text-gray-600 px-2 py-1 rounded-full text-xs';
-        relevanceBadge.textContent = `${hilo.relevancia_editorial}/10`;
-        
-        hiloItem.appendChild(hiloInfo);
-        hiloItem.appendChild(relevanceBadge);
-        
-        hiloItem.addEventListener('click', () => {
-            vincularHechoAHilo(state.selectedHecho, hilo);
-        });
-        
-        hilosList.appendChild(hiloItem);
-    });
-}
-
-// Abrir modal de crear hilo
-function openCrearHiloModal() {
-    const modal = document.getElementById('crear-hilo-modal');
-    const titulo = document.getElementById('hilo-titulo');
-    const etiquetas = document.getElementById('hilo-etiquetas');
-    const relevancia = document.getElementById('hilo-relevancia');
-    
-    modal.classList.remove('hidden');
-    titulo.value = '';
-    etiquetas.value = '';
-    relevancia.value = 5;
-    document.getElementById('hilo-relevancia-valor').textContent = '5/10';
-}
-
-// Crear nuevo hilo
-function createNewHilo() {
-    const titulo = document.getElementById('hilo-titulo').value;
-    const etiquetas = document.getElementById('hilo-etiquetas').value;
-    const relevancia = parseInt(document.getElementById('hilo-relevancia').value);
-    
-    if (!titulo) {
-        alert('El título es obligatorio');
-        return;
-    }
-    
-    const newHilo = {
-        id: state.hilosNarrativos.length + 1,
-        titulo: titulo,
-        relevancia: relevancia,
-        titular_principal: state.selectedHecho.contenido,
-        hechos: [state.selectedHecho],
-        fuentes: [{ medio: state.selectedHecho.medio, cantidad: 1 }],
-        paises: []
-    };
-    
-    // Añadir el nuevo hilo y vincularlo
-    state.hilosNarrativos.push(newHilo);
-    vincularHechoAHilo(state.selectedHecho, newHilo);
-    
-    document.getElementById('crear-hilo-modal').classList.add('hidden');
-}
-
-// Vincular hecho a hilo
-function vincularHechoAHilo(hecho, hilo) {
-    // Eliminar de hechos sin hilo
-    const hechoIndex = state.hechosSinHilo.findIndex(h => h.id === hecho.id);
-    if (hechoIndex >= 0) {
-        state.hechosSinHilo.splice(hechoIndex, 1);
-    }
-    
-    // Asegurarse de que el hilo existe en state.hilosNarrativos
-    const hiloIndex = state.hilosNarrativos.findIndex(h => h.id === hilo.id);
-    if (hiloIndex === -1) {
-        state.hilosNarrativos.push(hilo);
-    }
-    
-    // Actualizar el hecho para que tenga hilo_id
-    hecho.hilo_id = hilo.id;
-    
-    // Añadir el hecho al hilo si no está ya
-    if (!hilo.hechos.some(h => h.id === hecho.id)) {
-        hilo.hechos.push(hecho);
-    }
-    
-    // Actualizar fuentes
-    const sourceIndex = hilo.fuentes.findIndex(f => f.medio === hecho.medio);
-    if (sourceIndex >= 0) {
-        hilo.fuentes[sourceIndex].cantidad++;
-    } else {
-        hilo.fuentes.push({ medio: hecho.medio, cantidad: 1 });
-    }
-    
-    // Cerrar modal y renderizar
-    document.getElementById('vincular-hilo-modal').classList.add('hidden');
-    renderHilosNarrativos();
-    renderHechosSinHilo();
-}
-
-// Abrir detalle de hecho
-function openHechoDetalle(hecho) {
-    const modal = document.getElementById('detalle-hecho-modal');
-    const titulo = document.getElementById('detalle-titulo');
-    const contenido = document.getElementById('detalle-contenido');
-    const fuente = document.getElementById('detalle-fuente');
-    const url = document.getElementById('detalle-url');
-    const importancia = document.getElementById('hecho-importancia');
-    const importanciaValor = document.getElementById('hecho-importancia-valor');
-    const hilosVinculados = document.getElementById('hilos-vinculados');
-    
-    state.selectedHecho = hecho;
-    titulo.textContent = hecho.contenido.substring(0, 50) + (hecho.contenido.length > 50 ? '...' : '');
-    contenido.textContent = hecho.contenido;
-    fuente.textContent = `${hecho.medio} - ${hecho.articulo_titulo || 'Artículo'}`;
-    url.href = hecho.url || '#';
-    importancia.value = hecho.importancia;
-    importanciaValor.textContent = `${hecho.importancia}/10`;
-    
-    // Mostrar hilos vinculados
-    hilosVinculados.innerHTML = '';
-    if (hecho.hilo_id) {
-        const hilo = state.hilosNarrativos.find(h => h.id === hecho.hilo_id);
-        if (hilo) {
-            const tag = document.createElement('span');
-            tag.className = 'bg-blue-100 text-blue-600 px-3 py-1 rounded-full text-sm';
-            tag.textContent = hilo.titulo;
-            hilosVinculados.appendChild(tag);
-        }
-    }
-    
-    modal.classList.remove('hidden');
-}
-
-// Mostrar fuentes
-function showSources(fuentes) {
-    let sourceText = 'Fuentes:\n\n';
-    fuentes.forEach(f => {
-        sourceText += `${f.medio}: ${f.cantidad} artículo${f.cantidad > 1 ? 's' : ''}\n`;
-    });
-    alert(sourceText);
-}
-
-// Formatear fecha
-function formatDate(dateString) {
-    const date = new Date(dateString);
-    return date.toLocaleString('es-ES', {
-        day: '2-digit',
-        month: '2-digit',
-        hour: '2-digit',
-        minute: '2-digit'
-    });
-}
-
-// Obtener total de menciones
-function getTotalMentions(fuentes) {
-    return fuentes.reduce((total, f) => total + f.cantidad, 0);
-}
-
-// Mostrar mensaje toast
-function showToast(message) {
-    // Crear elemento toast si no existe
-    let toast = document.getElementById('toast-message');
-    if (!toast) {
-        toast = document.createElement('div');
-        toast.id = 'toast-message';
-        toast.className = 'fixed bottom-4 right-4 bg-blue-600 text-white py-2 px-4 rounded shadow-lg transform transition-all duration-300 translate-y-20 opacity-0';
-        document.body.appendChild(toast);
-    }
-    
-    // Establecer mensaje
-    toast.textContent = message;
-    
-    // Mostrar toast
-    setTimeout(() => {
-        toast.classList.remove('translate-y-20', 'opacity-0');
-    }, 10);
-    
-    // Ocultar después de 3 segundos
-    setTimeout(() => {
-        toast.classList.add('translate-y-20', 'opacity-0');
-    }, 3000);
-}
+    <!-- Scripts -->
+    <script src="js/mockData.js"></script>
+    <script src="js/dashboard.js"></script>
+</body>
+</html>
