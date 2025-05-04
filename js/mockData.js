@@ -1,329 +1,144 @@
-// Datos simulados para la Máquina de Noticias
 const mockData = {
-    // Artículos con problemas
     articulosProblemas: [
         {
             id: 1,
-            titular: "Crisis diplomática entre España y Argentina tras declaraciones de Milei",
-            medio: "El País",
-            fecha_publicacion: "2025-04-28",
-            url: "#",
+            titular: "Error en la extracción del contenido del artículo",
             estado_procesamiento: "error_extraccion",
-            error_detalle: "No se pudo extraer el contenido del artículo"
+            url: "#",
+            medio: "El País"
         },
         {
             id: 2,
-            titular: "Nuevo pacto comercial entre Chile y Brasil entra en vigor",
-            medio: "La Nación",
-            fecha_publicacion: "2025-05-01",
-            url: "#",
+            titular: "Error al guardar en la base de datos",
             estado_procesamiento: "error_bd",
-            error_detalle: "Error al guardar en la base de datos"
+            url: "#",
+            medio: "La Nación"
         },
         {
             id: 3,
-            titular: "El Banco Central de México aumenta las tasas de interés por tercera vez consecutiva",
-            medio: "El Universal",
-            fecha_publicacion: "2025-05-02",
-            url: "#",
+            titular: "Múltiples entidades no pudieron ser normalizadas",
             estado_procesamiento: "intervencion_requerida",
-            error_detalle: "Múltiples entidades no pudieron ser normalizadas"
+            url: "#",
+            medio: "El Universal"
         }
     ],
     
-    // Hilos narrativos activos
     hilosActivos: [
         {
             id: 1,
-            titulo: "Crisis diplomática España-Argentina",
-            relevancia_editorial: 8,
-            fecha_ultimo_hecho: "2025-05-02"
+            titulo: "Crisis diplomática España – Argentina",
+            relevancia_editorial: 9,
+            fecha_ultimo_hecho: "2025-05-03"
         },
         {
             id: 2,
-            titulo: "Negociaciones comerciales Mercosur-UE",
-            relevancia_editorial: 6,
-            fecha_ultimo_hecho: "2025-04-29"
-        },
-        {
-            id: 3,
-            titulo: "Elecciones presidenciales Colombia 2025",
-            relevancia_editorial: 9,
-            fecha_ultimo_hecho: "2025-05-01"
-        },
-        {
-            id: 4,
-            titulo: "Crisis migratoria en la frontera México-EEUU",
+            titulo: "Acuerdo comercial Brasil-Chile",
             relevancia_editorial: 7,
             fecha_ultimo_hecho: "2025-05-02"
         },
         {
-            id: 5,
-            titulo: "Protestas por reforma judicial en Chile",
-            relevancia_editorial: 5,
-            fecha_ultimo_hecho: "2025-04-25"
-        }
+            id: 3,
+            titulo: "Elecciones presidenciales Colombia 2025",
+            relevancia_editorial: 8,
+            fecha_ultimo_hecho: "2025-05-01"
+        },
+        // ... más hilos hasta tener suficiente para 30+ noticias
     ],
     
-    // Hechos para revisión
     hechos: [
+        // Hilo 1: Crisis diplomática España-Argentina (9/10 relevancia)
         {
             id: 1,
             contenido: "El presidente argentino, Javier Milei, criticó duramente al gobierno español durante su discurso en la cumbre de Madrid, calificando sus políticas económicas como 'fracasadas e ideologizadas'.",
-            fecha_ocurrencia: {
-                inicio: "2025-05-02T14:30:00",
-                fin: "2025-05-02T15:45:00"
-            },
-            precision_temporal: "exacta",
-            tipo_hecho: "DECLARACION",
+            fecha_ocurrencia: { inicio: "2025-05-03T14:30:00" },
             importancia: 9,
-            confiabilidad: 5,
-            pais: ["España", "Argentina"],
-            etiquetas: ["diplomacia", "relaciones bilaterales", "tensión diplomática"],
-            validado: false,
-            entidades_relacionadas: [
-                {
-                    id: 101,
-                    nombre: "Javier Milei",
-                    tipo: "PERSONA",
-                    notas_usuario: "Presidente argentino desde diciembre 2023. Tendencia a declaraciones polémicas."
-                },
-                {
-                    id: 102,
-                    nombre: "Gobierno de España",
-                    tipo: "INSTITUCION"
-                },
-                {
-                    id: 103,
-                    nombre: "Cumbre de Madrid",
-                    tipo: "EVENTO"
-                }
+            tipo_hecho: "DECLARACION",
+            articulos_relacionados: [
+                { medio: "El País", titular: "Milei provoca tensión con España", url: "#1" },
+                { medio: "ABC", titular: "Duras críticas de Milei", url: "#2" },
+                { medio: "El Mundo", titular: "Crisis diplomática", url: "#3" },
+                { medio: "La Vanguardia", titular: "Milei arremete contra España", url: "#4" },
+                { medio: "El Periódico", titular: "Tensión España-Argentina", url: "#5" }
             ],
-            articulo_origen: {
-                id: 1001,
-                titular: "Milei provoca una crisis diplomática con España tras duras críticas en Madrid",
-                medio: "El País",
-                pais_publicacion: "España",
-                fecha_publicacion: "2025-05-02T17:20:00",
-                url: "#"
-            },
-            hilo_vinculado: {
-                id: 1,
-                titulo: "Crisis diplomática España-Argentina",
-                relevancia_editorial: 8
-            }
+            hilo_vinculado: { id: 1, titulo: "Crisis diplomática España – Argentina" },
+            entidades_mencionadas: ["Javier Milei", "España", "Argentina", "Madrid"]
         },
         {
             id: 2,
             contenido: "El Gobierno español ha llamado a consultas al embajador en Argentina tras las declaraciones de Milei, calificándolas de 'inaceptables y faltas de respeto institucional'.",
-            fecha_ocurrencia: {
-                inicio: "2025-05-02T19:15:00",
-                fin: "2025-05-02T19:15:00"
-            },
-            precision_temporal: "exacta",
-            tipo_hecho: "ANUNCIO",
+            fecha_ocurrencia: { inicio: "2025-05-03T19:15:00" },
             importancia: 8,
-            confiabilidad: 5,
-            pais: ["España", "Argentina"],
-            etiquetas: ["diplomacia", "crisis diplomática", "embajador"],
-            validado: false,
-            entidades_relacionadas: [
-                {
-                    id: 102,
-                    nombre: "Gobierno de España",
-                    tipo: "INSTITUCION"
-                },
-                {
-                    id: 104,
-                    nombre: "Embajada de España en Argentina",
-                    tipo: "INSTITUCION"
-                },
-                {
-                    id: 101,
-                    nombre: "Javier Milei",
-                    tipo: "PERSONA",
-                    notas_usuario: "Presidente argentino desde diciembre 2023. Tendencia a declaraciones polémicas."
-                }
+            tipo_hecho: "ANUNCIO",
+            articulos_relacionados: [
+                { medio: "El País", titular: "España llama a consultas", url: "#6" },
+                { medio: "ABC", titular: "Respuesta española", url: "#7" },
+                { medio: "La Vanguardia", titular: "Medidas diplomáticas", url: "#8" }
             ],
-            articulo_origen: {
-                id: 1002,
-                titular: "España llama a consultas a su embajador en Argentina tras las críticas de Milei",
-                medio: "El Mundo",
-                pais_publicacion: "España",
-                fecha_publicacion: "2025-05-02T20:45:00",
-                url: "#"
-            },
-            hilo_sugerido: {
-                id: 1,
-                titulo: "Crisis diplomática España-Argentina",
-                relevancia_editorial: 8
-            }
+            hilo_vinculado: { id: 1, titulo: "Crisis diplomática España – Argentina" },
+            entidades_mencionadas: ["España", "Argentina", "Embajador"]
         },
         {
             id: 3,
-            contenido: "El ministro de Economía de Brasil, Fernando Haddad, anunció la firma de un acuerdo comercial con Chile que eliminará aranceles en más de 500 productos durante los próximos 3 años.",
-            fecha_ocurrencia: {
-                inicio: "2025-05-01",
-                fin: "2025-05-01"
-            },
-            precision_temporal: "dia",
-            tipo_hecho: "ANUNCIO",
+            contenido: "Reacciones de los empresarios españoles con inversiones en Argentina ante la escalada de tensiones.",
+            fecha_ocurrencia: { inicio: "2025-05-03T10:00:00" },
             importancia: 6,
-            confiabilidad: 4,
-            pais: ["Brasil", "Chile"],
-            etiquetas: ["comercio internacional", "acuerdo comercial", "aranceles"],
-            validado: false,
-            entidades_relacionadas: [
-                {
-                    id: 105,
-                    nombre: "Fernando Haddad",
-                    tipo: "PERSONA"
-                },
-                {
-                    id: 106,
-                    nombre: "Ministerio de Economía de Brasil",
-                    tipo: "INSTITUCION"
-                },
-                {
-                    id: 107,
-                    nombre: "Acuerdo Comercial Chile-Brasil 2025",
-                    tipo: "NORMATIVA"
-                }
+            tipo_hecho: "DECLARACION",
+            articulos_relacionados: [
+                { medio: "Expansión", titular: "Empresarios españoles preocupados", url: "#9" },
+                { medio: "Cinco Días", titular: "Inversiones en riesgo", url: "#10" }
             ],
-            articulo_origen: {
-                id: 1003,
-                titular: "Chile y Brasil firman histórico acuerdo comercial",
-                medio: "El Mercurio",
-                pais_publicacion: "Chile",
-                fecha_publicacion: "2025-05-01T16:30:00",
-                url: "#"
-            }
+            hilo_vinculado: { id: 1, titulo: "Crisis diplomática España – Argentina" },
+            entidades_mencionadas: ["empresarios", "España", "Argentina"]
         },
+        
+        // Hilo 2: Acuerdo comercial Brasil-Chile (7/10 relevancia)
         {
             id: 4,
-            contenido: "La candidata presidencial colombiana María Fernanda Cabal lidera las encuestas con un 32% de intención de voto, según el último sondeo de DataAnalítica.",
-            fecha_ocurrencia: {
-                inicio: "2025-05-01",
-                fin: "2025-05-01"
-            },
-            precision_temporal: "dia",
-            tipo_hecho: "ANUNCIO",
+            contenido: "Brasil y Chile firmaron un histórico acuerdo comercial que eliminará aranceles en más de 500 productos durante los próximos 3 años.",
+            fecha_ocurrencia: { inicio: "2025-05-02T16:30:00" },
             importancia: 7,
-            confiabilidad: 3,
-            pais: ["Colombia"],
-            etiquetas: ["elecciones", "encuestas", "presidenciales"],
-            validado: true,
-            entidades_relacionadas: [
-                {
-                    id: 108,
-                    nombre: "María Fernanda Cabal",
-                    tipo: "PERSONA"
-                },
-                {
-                    id: 109,
-                    nombre: "DataAnalítica",
-                    tipo: "ORGANIZACION"
-                },
-                {
-                    id: 110,
-                    nombre: "Elecciones Presidenciales Colombia 2025",
-                    tipo: "EVENTO"
-                }
+            tipo_hecho: "ANUNCIO",
+            articulos_relacionados: [
+                { medio: "El Mercurio", titular: "Acuerdo histórico Brasil-Chile", url: "#11" },
+                { medio: "O Globo", titular: "Pacto comercial estratégico", url: "#12" },
+                { medio: "La Tercera", titular: "Nueva era comercial", url: "#13" }
             ],
-            articulo_origen: {
-                id: 1004,
-                titular: "Cabal lidera encuestas a seis meses de las presidenciales colombianas",
-                medio: "El Tiempo",
-                pais_publicacion: "Colombia",
-                fecha_publicacion: "2025-05-01T18:45:00",
-                url: "#"
-            },
-            hilo_vinculado: {
-                id: 3,
-                titulo: "Elecciones presidenciales Colombia 2025",
-                relevancia_editorial: 9
-            }
+            hilo_vinculado: { id: 2, titulo: "Acuerdo comercial Brasil-Chile" },
+            entidades_mencionadas: ["Brasil", "Chile", "Fernando Haddad"]
         },
         {
             id: 5,
-            contenido: "El Congreso mexicano aprobó la controvertida reforma al sistema de pensiones que incrementa gradualmente las aportaciones de los empleadores del 5.15% actual hasta el 13% en 2030.",
-            fecha_ocurrencia: {
-                inicio: "2025-05-02",
-                fin: "2025-05-02"
-            },
-            precision_temporal: "dia",
-            tipo_hecho: "NORMATIVA",
-            importancia: 8,
-            confiabilidad: 5,
-            pais: ["México"],
-            etiquetas: ["reforma", "pensiones", "congreso"],
-            validado: false,
-            entidades_relacionadas: [
-                {
-                    id: 111,
-                    nombre: "Congreso de México",
-                    tipo: "INSTITUCION"
-                },
-                {
-                    id: 112,
-                    nombre: "Reforma al Sistema de Pensiones 2025",
-                    tipo: "NORMATIVA"
-                }
+            contenido: "Los sectores más beneficiados por el acuerdo serán tecnología, agricultura y manufacturas, especialmente en el corredor bioceánico.",
+            fecha_ocurrencia: { inicio: "2025-05-02T10:15:00" },
+            importancia: 6,
+            tipo_hecho: "ANALISIS",
+            articulos_relacionados: [
+                { medio: "El Mercurio", titular: "Sectores beneficiados", url: "#14" },
+                { medio: "La Tercera", titular: "Oportunidades económicas", url: "#15" }
             ],
-            articulo_origen: {
-                id: 1005,
-                titular: "México aprueba histórica reforma al sistema de pensiones",
-                medio: "El Universal",
-                pais_publicacion: "México",
-                fecha_publicacion: "2025-05-02T22:10:00",
-                url: "#"
-            }
+            hilo_vinculado: { id: 2, titulo: "Acuerdo comercial Brasil-Chile" },
+            entidades_mencionadas: ["Brasil", "Chile", "tecnología", "agricultura"]
         },
-        {
-            id: 6,
-            contenido: "El número de migrantes detenidos en la frontera entre México y Estados Unidos aumentó un 27% en abril respecto al mes anterior, alcanzando los 173,000 cruces irregulares.",
-            fecha_ocurrencia: {
-                inicio: "2025-05-02",
-                fin: "2025-05-02"
-            },
-            precision_temporal: "dia",
-            tipo_hecho: "ANUNCIO",
-            importancia: 7,
-            confiabilidad: 4,
-            pais: ["México", "Estados Unidos"],
-            etiquetas: ["migración", "frontera", "crisis migratoria"],
-            validado: false,
-            entidades_relacionadas: [
-                {
-                    id: 113,
-                    nombre: "Frontera México-Estados Unidos",
-                    tipo: "LUGAR"
-                },
-                {
-                    id: 114,
-                    nombre: "Departamento de Seguridad Nacional de EEUU",
-                    tipo: "INSTITUCION",
-                    notas_usuario: "Sus cifras suelen ser precisas pero hay críticas a su metodología de conteo."
-                }
-            ],
-            articulo_origen: {
-                id: 1006,
-                titular: "Se dispara 27% el cruce irregular de migrantes en frontera norte",
-                medio: "El Universal",
-                pais_publicacion: "México",
-                fecha_publicacion: "2025-05-02T15:30:00",
-                url: "#"
-            },
-            hilo_sugerido: {
-                id: 4,
-                titulo: "Crisis migratoria en la frontera México-EEUU",
-                relevancia_editorial: 7
-            }
-        }
+        
+        // ... continuar con más hilos hasta tener 30+ noticias
+        // Hilo 3: Elecciones Colombia
+        // Más noticias de diferentes relevancia y países
     ]
 };
 
-// Exportar datos para su uso en otros archivos
-if (typeof module !== 'undefined') {
-    module.exports = mockData;
+// Función para generar más noticias dinámicamente
+function generateMoreHechos() {
+    const baseHechos = mockData.hechos;
+    const newHechos = [];
+    
+    for (let i = baseHechos.length; i < 30; i++) {
+        const hechoBase = baseHechos[i % baseHechos.length];
+        const newHecho = JSON.parse(JSON.stringify(hechoBase));
+        newHecho.id = i + 1;
+        newHechos.push(newHecho);
+    }
+    
+    return [...baseHechos, ...newHechos];
 }
+
+mockData.hechos = generateMoreHechos();
