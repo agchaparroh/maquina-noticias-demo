@@ -1,0 +1,216 @@
+// chat.js - Lógica para el Chat de Investigación
+
+let currentHilo = null;
+let savedQueries = [];
+
+document.addEventListener('DOMContentLoaded', function() {
+    const urlParams = new URLSearchParams(window.location.search);
+    let hechoId = urlParams.get('hecho');
+    const hiloId = urlParams.get('hilo');
+    
+    // Si viene de un hilo, cargar ese contexto
+    if (hiloId) {
+        const hilo = mockData.hilosNarrativos.find(h => h.id === parseInt(hiloId));
+        if (hilo) {
+            loadHiloContext(hilo);
+            // Si no hay hechoId pero hay hilo, usar el titular principal
+            if (!hechoId) {
+                const hechoInicial = document.getElementById('hecho-inicial');
+                hechoInicial.textContent = `Investigando: ${hilo.titular_principal}`;
+            }
+        }
+    }
+    
+    // Si hay un hechoId específico, cargar ese hecho
+    if (hechoId) {
+        const hecho = findHechoById(parseInt(hechoId));
+        if (hecho) {
+            const hechoInicial = document.getElementById('hecho-inicial');
+            hechoInicial.textContent = generateExplicacion(hecho);
+        }
+    }
+    
+    // Si no hay ni hilo ni hecho, mostrar mensaje genérico
+    if (!hiloId && !hechoId) {
+        const hechoInicial = document.getElementById('hecho-inicial');
+        hechoInicial.innerHTML = `
+            <p>Bienvenido al Chat de Investigación. Puede usar esta herramienta para:</p>
+            <ul class="list-disc list-inside mt-2">
+                <li>Consultar hilos narrativos específicos</li>
+                <li>Buscar hechos por entidades o temas</li>
+                <li>Explorar conexiones entre eventos</li>
+            </ul>
+            <p class="mt-2">Comience escribiendo su consulta...</p>
+        `;
+    }
+    
+    // Configurar chat
+    const messageInput = document.getElementById('message-input');
+    const sendButton = document.getElementById('send-message');
+    const chatMessages = document.getElementById('chat-messages');
+    
+    sendButton.addEventListener('click', sendMessage);
+    messageInput.addEventListener('keypress', function(e) {
+        if (e.key === 'Enter' && !e.shiftKey) {
+            e.preventDefault();
+            sendMessage();
+        }
+    });
+    
+    function sendMessage() {
+        const message = messageInput.value.trim();
+        if (!message) return;
+        
+        // Añadir mensaje del usuario
+        const userMessageDiv = document.createElement('div');
+        userMessageDiv.className = 'text-right';
+        userMessageDiv.innerHTML = `
+            <div class="inline-block bg-blue-50 text-blue-800 rounded p-3 max-w-[80%] text-sm">
+                ${message}
+            </div>
+        `;
+        chatMessages.appendChild(userMessageDiv);
+        
+        messageInput.value = '';
+        chatMessages.scrollTop = chatMessages.scrollHeight;
+        
+        // Mostrar indicador de procesamiento
+        const processingDiv = document.createElement('div');
+        processingDiv.className = 'text-left';
+        processingDiv.innerHTML = `
+            <div class="inline-block bg-gray-50 text-gray-600 rounded p-3 max-w-[80%] text-sm italic">
+                ${getProcessingMessage()}
+            </div>
+        `;
+        chatMessages.appendChild(processingDiv);
+        chatMessages.scrollTop = chatMessages.scrollHeight;
+        
+        // Procesar la consulta
+        processQuery(message, processingDiv);
+    }
+});
+
+function loadHiloContext(hilo) {
+    currentHilo = hilo;
+    const chatHeader = document.getElementById('chat-header');
+    const chatContext = document.getElementById('chat-context');
+    chatHeader.classList.remove('hidden');
+    chatContext.textContent = `[${hilo.titulo}]`;
+}
+
+function getProcessingMessage() {
+    const messages = [
+        "Interpretando consulta...",
+        "Analizando contexto...",
+        "Consultando base de datos..."
+    ];
+    return messages[Math.floor(Math.random() * messages.length)];
+}
+
+function processQuery(query, processingDiv) {
+    setTimeout(() => {
+        processingDiv.remove();
+        
+        let response = '';
+        
+        // Responder basado en la consulta y el contexto
+        if (query.toLowerCase().includes('cronología') && currentHilo?.id === 1) {
+            response = generateCronologiaResponse();
+        } else if (query.toLowerCase().includes('declaración oficial') && currentHilo?.id === 1) {
+            response = generateDeclaracionResponse();
+        } else if (query.toLowerCase().includes('guarda') && query.toLowerCase().includes('búsqueda')) {
+            // Extraer el nombre a guardar
+            const matches = query.match(/'(.+)'/);
+            if (matches) {
+                const savedName = matches[1];
+                savedQueries.push({name: savedName, query: query.split("'")[0]});
+                response = `Consulta guardada como '${savedName}'`;
+            }
+        } else {
+            response = generateGenericResponse(query);
+        }
+        
+        const botMessageDiv = document.createElement('div');
+        botMessageDiv.className = 'text-left';
+        botMessageDiv.innerHTML = `
+            <div class="inline-block bg-gray-50 text-gray-800 rounded p-3 max-w-[80%] text-sm">
+                ${response}
+            </div>
+        `;
+        chatMessages.appendChild(botMessageDiv);
+        chatMessages.scrollTop = chatMessages.scrollHeight;
+    }, 1500);
+}
+
+function generateCronologiaResponse() {
+    return `
+        <div class="space-y-4">
+            <p class="font-medium mb-2">Aquí tienes la cronología de eventos relevantes de la última semana para el hilo "[Conflicto entre las disidencias de las FARC y el ELN]":</p>
+            
+            <div class="pl-4 border-l-4 border-red-500">
+                <p><strong>Hoy (29-Jul):</strong> Reportan enfrentamiento entre ELN y Disidencias FARC en zona rural de Tibú, cerca de Arauca. Se mencionan combates por control territorial.</p>
+                <p class="text-sm text-gray-600">(Tipo: SUCESO, Importancia: 7/10) (Fuente: El Tiempo)</p>
+            </div>
+            
+            <div class="pl-4 border-l-4 border-yellow-500">
+                <p><strong>27-Jul:</strong> Comunicado atribuido a alias 'John Mechas' amenaza con "respuesta contundente" a incursiones del ELN en sus zonas de influencia.</p>
+                <p class="text-sm text-gray-600">(Tipo: DECLARACION, Importancia: 6/10) (Fuente: Análisis Insight Crime)</p>
+            </div>
+            
+            <div class="pl-4 border-l-4 border-blue-500">
+                <p><strong>24-Jul:</strong> Autoridades reportan desplazamiento de familias en vereda de Sardinata debido a presencia de ambos grupos armados.</p>
+                <p class="text-sm text-gray-600">(Tipo: SUCESO, Importancia: 5/10) (Fuente: Defensoría del Pueblo)</p>
+            </div>
+            
+            <p class="mt-4 text-sm text-gray-600">La información se basa en los hechos vinculados a este hilo narrativo.</p>
+        </div>
+    `;
+}
+
+function generateDeclaracionResponse() {
+    return `
+        <div class="space-y-4">
+            <p>No he encontrado declaraciones oficiales específicas del Gobierno Colombia o del Ministerio de Defensa sobre el enfrentamiento reportado hoy en Tibú vinculadas directamente a este hilo.</p>
+            
+            <p>Sin embargo, en un hecho relacionado del 26-Jul, el Ministro de Defensa mencionó la "preocupante situación de orden público en el Catatumbo" y anunció refuerzo militar en la zona.</p>
+            <p class="text-sm text-gray-600">(Tipo: DECLARACION, Importancia: 6/10) (Fuente: Rueda de Prensa MinDefensa)</p>
+        </div>
+    `;
+}
+
+function generateGenericResponse(query) {
+    return `Esta es una simulación. En la implementación real, aquí aparecería una respuesta contextual basada en la consulta "${query}" ${currentHilo ? `dentro del hilo "${currentHilo.titulo}"` : ''}.`;
+}
+
+function findHechoById(id) {
+    let hecho = mockData.hechosSinHilo.find(h => h.id === id);
+    if (hecho) return hecho;
+    
+    for (const hilo of mockData.hilosNarrativos) {
+        hecho = hilo.hechos.find(h => h.id === id);
+        if (hecho) return hecho;
+    }
+    
+    return null;
+}
+
+function generateExplicacion(hecho) {
+    const entidadesTexto = hecho.entidades_mencionadas?.join(', ') || '';
+    return `
+Este hecho noticioso se refiere a ${hecho.contenido}
+
+Ocurrido el ${new Date(hecho.fecha_ocurrencia?.inicio || hecho.fecha).toLocaleDateString('es-ES', { 
+    day: 'numeric', 
+    month: 'long', 
+    year: 'numeric' 
+})}, este evento tiene una importancia de ${hecho.importancia} en una escala del 1 al 10 y ha sido clasificado como ${hecho.tipo_hecho || 'SUCESO'}.
+
+${hecho.entidades_mencionadas ? `Las principales entidades mencionadas incluyen: ${entidadesTexto}.` : ''}
+
+${hecho.hilo_id ? `Este hecho forma parte del hilo narrativo "${currentHilo?.titulo || `hilo #${hecho.hilo_id}`}", el cual agrupa eventos relacionados que permiten entender el contexto más amplio de esta situación.` : 'Este hecho aún no está vinculado a ningún hilo narrativo.'}
+
+${hecho.medio ? `Ha sido reportado por ${hecho.medio}, demostrando su relevancia en el panorama actual de noticias.` : ''}
+
+¿Qué aspecto específico de este hecho te gustaría explorar más a fondo?
+    `.trim();
+}
