@@ -21,6 +21,12 @@ document.addEventListener('DOMContentLoaded', function() {
     state.hechosSinHilo = mockData.hechosSinHilo.slice();
     state.articulosProblemas = mockData.articulosProblemas.slice();
     
+    // Ordenar hilos por relevancia (de mayor a menor)
+    state.hilosNarrativos.sort((a, b) => b.relevancia - a.relevancia);
+    
+    // Ordenar hechos sin hilo por importancia (de mayor a menor)
+    state.hechosSinHilo.sort((a, b) => b.importancia - a.importancia);
+    
     // Actualizar contadores
     document.getElementById('problemas-count').textContent = state.articulosProblemas.length;
     
@@ -63,11 +69,12 @@ function initPanelProblemas() {
     toggleProblemas.addEventListener('click', () => {
         problemasContent.classList.toggle('hidden');
         problemasArrow.classList.toggle('rotate-180');
+        
+        // Renderizar problemas si no están ya renderizados y el panel está visible
+        if (!problemasContent.classList.contains('hidden') && !problemasContent.querySelector('.problem-item')) {
+            renderProblemas();
+        }
     });
-    
-    // Ocultar panel por defecto
-    problemasContent.classList.add('hidden');
-    problemasArrow.classList.add('rotate-180');
 }
 
 // Renderizar artículos con problemas
@@ -100,10 +107,7 @@ function renderHilosNarrativos() {
     const container = document.getElementById('hilos-narrativos-container');
     container.innerHTML = '';
     
-    // Ordenar hilos por relevancia
-    const hilosOrdenados = [...state.hilosNarrativos].sort((a, b) => b.relevancia - a.relevancia);
-    
-    hilosOrdenados.forEach((hilo, index) => {
+    state.hilosNarrativos.forEach((hilo, index) => {
         const hiloBlock = createHiloBlock(hilo, index);
         container.appendChild(hiloBlock);
     });
