@@ -95,7 +95,7 @@ function loadHiloContext(hilo) {
     const chatHeader = document.getElementById('chat-header');
     const chatContext = document.getElementById('chat-context');
     chatHeader.classList.remove('hidden');
-    chatContext.textContent = `[${hilo.titulo}]`;
+    chatContext.textContent = hilo.titulo; // Sin corchetes
 }
 
 function getProcessingMessage() {
@@ -250,20 +250,22 @@ function getTotalMentionsForHilo(fuentes) {
 function generateExplicacion(hecho) {
     const entidadesTexto = hecho.entidades_mencionadas?.join(', ') || '';
     return `
-Este hecho noticioso se refiere a ${hecho.contenido}
-
-Ocurrido el ${new Date(hecho.fecha_ocurrencia?.inicio || hecho.fecha).toLocaleDateString('es-ES', { 
+Este hecho noticioso ocurrió el ${new Date(hecho.fecha_ocurrencia?.inicio || hecho.fecha).toLocaleDateString('es-ES', { 
     day: 'numeric', 
     month: 'long', 
     year: 'numeric' 
-})}, este evento tiene una importancia de ${hecho.importancia} en una escala del 1 al 10 y ha sido clasificado como ${hecho.tipo_hecho || 'SUCESO'}.
+})} y tiene una importancia de ${hecho.importancia} en una escala del 1 al 10. Ha sido clasificado como ${hecho.tipo_hecho || 'SUCESO'} por nuestro sistema de categorización.
 
-${hecho.entidades_mencionadas ? `Las principales entidades mencionadas incluyen: ${entidadesTexto}.` : ''}
+Este evento específico forma parte de una cadena de acontecimientos que están siendo monitoreados en tiempo real. La información ha sido procesada automáticamente desde múltiples fuentes de información confiables.
 
-${hecho.hilo_id ? `Este hecho forma parte del hilo narrativo "${currentHilo?.titulo || `hilo #${hecho.hilo_id}`}", el cual agrupa eventos relacionados que permiten entender el contexto más amplio de esta situación.` : 'Este hecho aún no está vinculado a ningún hilo narrativo.'}
+${hecho.entidades_mencionadas ? `Entre las entidades principales mencionadas en este evento destacan: ${entidadesTexto}.` : ''}
 
-${hecho.medio ? `Ha sido reportado por ${hecho.medio}, demostrando su relevancia en el panorama actual de noticias.` : ''}
+${hecho.hilo_id ? `Este hecho forma parte del hilo narrativo "${currentHilo?.titulo || `hilo #${hecho.hilo_id}`}", el cual agrupa eventos relacionados que permiten entender el contexto más amplio de esta situación. Los eventos dentro de un mismo hilo comparten elementos temáticos, geográficos o institucionales que facilitan el seguimiento de desarrollos complejos.` : 'Este hecho aún no está vinculado a ningún hilo narrativo específico, lo cual indica que puede ser un evento aislado o está en proceso de clasificación.'}
 
-¿Qué aspecto específico de este hecho te gustaría explorar más a fondo?
+${hecho.medio ? `Ha sido reportado por ${hecho.medio}, una de las fuentes que formaparte de nuestra red de monitoreo. La información se corrobora mediante múltiples fuentes antes de ser integrada en el sistema de análisis.` : ''}
+
+El sistema de IA analiza continuamente el flujo de información para identificar patrones, relaciones entre eventos y tendencias emergentes. Esta aproximación permite a los periodistas tener una visión más completa y contextualizada de los acontecimientos.
+
+Puede consultar sobre cualquier aspecto específico de este hecho, como su relación con otros eventos, el contexto histórico, o detalles específicos de los actores involucrados.
     `.trim();
 }
