@@ -15,7 +15,8 @@ const mockData = {
                     medio: "El Tiempo",
                     importancia: 8,
                     url: "https://www.eltiempo.com/conflicto-farc-eln-arauca",
-                    hilo_id: 1
+                    hilo_id: 1,
+                    articulo_titulo: "Combates entre FARC y ELN en Arauca"
                 },
                 {
                     id: 102,
@@ -24,7 +25,8 @@ const mockData = {
                     medio: "El Espectador",
                     importancia: 7,
                     url: "https://www.elespectador.com/desplazamiento-arauca",
-                    hilo_id: 1
+                    hilo_id: 1,
+                    articulo_titulo: "Crisis humanitaria en Arauca"
                 },
                 {
                     id: 103,
@@ -33,7 +35,8 @@ const mockData = {
                     medio: "Caracol Radio",
                     importancia: 9,
                     url: "https://caracol.com.co/alerta-humanitaria-arauca",
-                    hilo_id: 1
+                    hilo_id: 1,
+                    articulo_titulo: "Alerta humanitaria en Arauca"
                 }
             ],
             fuentes: [
@@ -57,7 +60,8 @@ const mockData = {
                     medio: "Prensa Libre",
                     importancia: 8,
                     url: "https://www.prensalibre.com/corrupcion-justicia",
-                    hilo_id: 2
+                    hilo_id: 2,
+                    articulo_titulo: "Investigación sobre corrupción en la justicia"
                 },
                 {
                     id: 105,
@@ -66,7 +70,8 @@ const mockData = {
                     medio: "El Periódico",
                     importancia: 7,
                     url: "https://elperiodico.com.gt/protestas-justicia",
-                    hilo_id: 2
+                    hilo_id: 2,
+                    articulo_titulo: "Protestas contra la justicia guatemalteca"
                 },
                 {
                     id: 106,
@@ -75,7 +80,8 @@ const mockData = {
                     medio: "Soy502",
                     importancia: 8,
                     url: "https://www.soy502.com/dialogo-reforma-judicial",
-                    hilo_id: 2
+                    hilo_id: 2,
+                    articulo_titulo: "Diálogo nacional sobre reforma judicial"
                 }
             ],
             fuentes: [
@@ -98,7 +104,8 @@ const mockData = {
                     medio: "El Colombiano",
                     importancia: 8,
                     url: "https://www.elcolombiano.com/senado-aprueba-reforma",
-                    hilo_id: 3
+                    hilo_id: 3,
+                    articulo_titulo: "Senado aprueba reforma pensional"
                 },
                 {
                     id: 108,
@@ -107,7 +114,8 @@ const mockData = {
                     medio: "RCN Radio",
                     importancia: 6,
                     url: "https://www.rcnradio.com/protestas-pensionados",
-                    hilo_id: 3
+                    hilo_id: 3,
+                    articulo_titulo: "Protestas de pensionados"
                 },
                 {
                     id: 109,
@@ -116,7 +124,8 @@ const mockData = {
                     medio: "Portafolio",
                     importancia: 7,
                     url: "https://www.portafolio.co/analisis-reforma",
-                    hilo_id: 3
+                    hilo_id: 3,
+                    articulo_titulo: "Análisis económico de reforma pensional"
                 }
             ],
             fuentes: [
@@ -140,7 +149,8 @@ const mockData = {
                     medio: "La Nación",
                     importancia: 9,
                     url: "https://www.lanacion.com.ar/milei-primera-vuelta",
-                    hilo_id: 4
+                    hilo_id: 4,
+                    articulo_titulo: "Victoria de Milei en primera vuelta"
                 },
                 {
                     id: 111,
@@ -149,7 +159,8 @@ const mockData = {
                     medio: "Ámbito",
                     importancia: 7,
                     url: "https://www.ambito.com/mercados-elecciones",
-                    hilo_id: 4
+                    hilo_id: 4,
+                    articulo_titulo: "Reacción de mercados a elecciones"
                 },
                 {
                     id: 112,
@@ -158,7 +169,8 @@ const mockData = {
                     medio: "Clarín",
                     importancia: 8,
                     url: "https://www.clarin.com/analisis-internacional",
-                    hilo_id: 4
+                    hilo_id: 4,
+                    articulo_titulo: "Análisis internacional de las elecciones"
                 }
             ],
             fuentes: [
@@ -182,7 +194,8 @@ const mockData = {
                     medio: "El Universo",
                     importancia: 7,
                     url: "https://www.eluniverso.com/tropas-frontera",
-                    hilo_id: 5
+                    hilo_id: 5,
+                    articulo_titulo: "Movilización militar en frontera"
                 },
                 {
                     id: 114,
@@ -191,7 +204,8 @@ const mockData = {
                     medio: "El Tiempo",
                     importancia: 8,
                     url: "https://www.eltiempo.com/operativo-conjunto",
-                    hilo_id: 5
+                    hilo_id: 5,
+                    articulo_titulo: "Operativo conjunto binacional"
                 }
             ],
             fuentes: [
@@ -214,7 +228,8 @@ const mockData = {
                     medio: "El Comercio",
                     importancia: 8,
                     url: "https://elcomercio.pe/congreso-vacancia",
-                    hilo_id: 6
+                    hilo_id: 6,
+                    articulo_titulo: "Moción de vacancia contra Boluarte"
                 },
                 {
                     id: 116,
@@ -223,7 +238,8 @@ const mockData = {
                     medio: "RPP Noticias",
                     importancia: 7,
                     url: "https://rpp.pe/protestas-lima",
-                    hilo_id: 6
+                    hilo_id: 6,
+                    articulo_titulo: "Protestas contra la presidenta"
                 }
             ],
             fuentes: [
@@ -246,7 +262,8 @@ const mockData = {
                     medio: "Reforma",
                     importancia: 6,
                     url: "https://www.reforma.com/plan-asilo",
-                    hilo_id: 7
+                    hilo_id: 7,
+                    articulo_titulo: "Plan de asilo de AMLO"
                 },
                 {
                     id: 118,
@@ -255,7 +272,8 @@ const mockData = {
                     medio: "El Universal",
                     importancia: 5,
                     url: "https://www.eluniversal.com.mx/cndh-albergues",
-                    hilo_id: 7
+                    hilo_id: 7,
+                    articulo_titulo: "Condiciones de albergues migrantes"
                 }
             ],
             fuentes: [
@@ -269,76 +287,13 @@ const mockData = {
     
     hechosSinHilo: [
         {
-            id: 201,
-            contenido: "Bitcoin alcanza nuevo máximo histórico superando los $50,000",
-            fecha: "2024-03-18T14:20:00",
-            medio: "Portafolio",
-            importancia: 6,
-            url: "https://www.portafolio.co/economia/bitcoin-precio-record"
-        },
-        {
-            id: 202,
-            contenido: "Nuevo descubrimiento arqueológico en Ciudad Perdida",
-            fecha: "2024-03-18T16:45:00",
-            medio: "El Heraldo",
-            importancia: 5,
-            url: "https://www.elheraldo.co/descubrimiento-ciudad-perdida"
-        },
-        {
-            id: 203,
-            contenido: "Reforma pensional avanza en el Congreso con apoyo de la oposición",
-            fecha: "2024-03-18T18:30:00",
-            medio: "El Colombiano",
-            importancia: 8,
-            url: "https://www.elcolombiano.com/reforma-pensional-congreso"
-        },
-        {
-            id: 204,
-            contenido: "Colombia firma acuerdo comercial con República Checa",
-            fecha: "2024-03-18T20:15:00",
-            medio: "El Espectador",
-            importancia: 6,
-            url: "https://www.elespectador.com/acuerdo-comercial-checa"
-        },
-        {
             id: 205,
             contenido: "Descubren nueva especie de ave en el Chocó",
             fecha: "2024-03-19T09:00:00",
             medio: "National Geographic",
             importancia: 4,
-            url: "https://www.nationalgeographicla.com/nueva-ave-choco"
-        },
-        {
-            id: 206,
-            contenido: "América Latina crecerá 2.1% en 2024 según FMI",
-            fecha: "2024-03-19T10:30:00",
-            medio: "Bloomberg Línea",
-            importancia: 7,
-            url: "https://www.bloomberglinea.com/fmi-latam-2024"
-        },
-        {
-            id: 207,
-            contenido: "Inteligencia artificial revoluciona sector educativo en Brasil",
-            fecha: "2024-03-19T11:15:00",
-            medio: "O Globo",
-            importancia: 6,
-            url: "https://oglobo.globo.com/ia-educacao"
-        },
-        {
-            id: 208,
-            contenido: "Descubren yacimiento de litio en Chile valorado en $150 mil millones",
-            fecha: "2024-03-19T13:30:00",
-            medio: "La Tercera",
-            importancia: 8,
-            url: "https://www.latercera.com/yacimiento-litio"
-        },
-        {
-            id: 209,
-            contenido: "Científicos chilenos crean vacuna contra hantavirus",
-            fecha: "2024-03-19T15:00:00",
-            medio: "El Mercurio",
-            importancia: 7,
-            url: "https://www.elmercurio.com/vacuna-hantavirus"
+            url: "https://www.nationalgeographicla.com/nueva-ave-choco",
+            articulo_titulo: "Nueva especie de ave en Colombia"
         },
         {
             id: 210,
@@ -346,7 +301,71 @@ const mockData = {
             fecha: "2024-03-19T16:45:00",
             medio: "La Prensa",
             importancia: 5,
-            url: "https://prensa.com/plataforma-rural-urbana"
+            url: "https://prensa.com/plataforma-rural-urbana",
+            articulo_titulo: "Conexión digital rural-urbana"
+        },
+        {
+            id: 207,
+            contenido: "Inteligencia artificial revoluciona sector educativo en Brasil",
+            fecha: "2024-03-19T11:15:00",
+            medio: "O Globo",
+            importancia: 6,
+            url: "https://oglobo.globo.com/ia-educacao",
+            articulo_titulo: "IA en educación brasileña"
+        },
+        {
+            id: 201,
+            contenido: "Bitcoin alcanza nuevo máximo histórico superando los $50,000",
+            fecha: "2024-03-18T14:20:00",
+            medio: "Portafolio",
+            importancia: 6,
+            url: "https://www.portafolio.co/economia/bitcoin-precio-record",
+            articulo_titulo: "Bitcoin rompe récord histórico"
+        },
+        {
+            id: 204,
+            contenido: "Colombia firma acuerdo comercial con República Checa",
+            fecha: "2024-03-18T20:15:00",
+            medio: "El Espectador",
+            importancia: 6,
+            url: "https://www.elespectador.com/acuerdo-comercial-checa",
+            articulo_titulo: "Acuerdo comercial con República Checa"
+        },
+        {
+            id: 206,
+            contenido: "América Latina crecerá 2.1% en 2024 según FMI",
+            fecha: "2024-03-19T10:30:00",
+            medio: "Bloomberg Línea",
+            importancia: 7,
+            url: "https://www.bloomberglinea.com/fmi-latam-2024",
+            articulo_titulo: "Proyecciones económicas FMI"
+        },
+        {
+            id: 209,
+            contenido: "Científicos chilenos crean vacuna contra hantavirus",
+            fecha: "2024-03-19T15:00:00",
+            medio: "El Mercurio",
+            importancia: 7,
+            url: "https://www.elmercurio.com/vacuna-hantavirus",
+            articulo_titulo: "Avance científico en vacunas"
+        },
+        {
+            id: 203,
+            contenido: "Reforma pensional avanza en el Congreso con apoyo de la oposición",
+            fecha: "2024-03-18T18:30:00",
+            medio: "El Colombiano",
+            importancia: 8,
+            url: "https://www.elcolombiano.com/reforma-pensional-congreso",
+            articulo_titulo: "Avances en reforma pensional"
+        },
+        {
+            id: 208,
+            contenido: "Descubren yacimiento de litio en Chile valorado en $150 mil millones",
+            fecha: "2024-03-19T13:30:00",
+            medio: "La Tercera",
+            importancia: 8,
+            url: "https://www.latercera.com/yacimiento-litio",
+            articulo_titulo: "Hallazgo de yacimiento millonario"
         }
     ],
     
