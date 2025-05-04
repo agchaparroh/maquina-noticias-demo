@@ -4,295 +4,144 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Máquina de Noticias - Chat de Investigación</title>
-    <!-- Tailwind CSS vía CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Estilos personalizados -->
     <link rel="stylesheet" href="css/custom.css">
-    <style>
-        .chat-container {
-            height: calc(100vh - 180px);
-        }
-    </style>
 </head>
-<body class="bg-gray-100">
-    <nav class="bg-blue-600 text-white p-4">
+<body>
+    <nav class="p-4">
         <div class="container mx-auto flex justify-between items-center">
-            <h1 class="text-xl font-bold">Máquina de Noticias</h1>
-            <ul class="flex space-x-4">
-                <li><a href="index.html" class="hover:underline">Inicio</a></li>
-                <li><a href="dashboard.html" class="hover:underline">Dashboard de Revisión</a></li>
-                <li><a href="chat.html" class="font-bold underline">Chat de Investigación</a></li>
-                <li><a href="developer.html" class="hover:underline">Panel Desarrollador</a></li>
-                <li><a href="ingesta.html" class="hover:underline">Ingesta de Documentos</a></li>
+            <h1 class="text-lg">Máquina de Noticias</h1>
+            <ul class="flex space-x-6">
+                <li><a href="index.html">Inicio</a></li>
+                <li><a href="dashboard.html">Dashboard</a></li>
+                <li><a href="chat.html" class="font-medium">Chat de Investigación</a></li>
+                <li><a href="developer.html">Panel Desarrollador</a></li>
+                <li><a href="ingesta.html">Ingesta de Documentos</a></li>
             </ul>
         </div>
     </nav>
 
-    <div class="container mx-auto px-4 py-8">
-        <div class="flex justify-between items-center mb-4">
-            <h1 class="text-3xl font-bold">Chat de Investigación</h1>
-            <div class="flex items-center text-blue-600">
-                <span class="inline-block w-3 h-3 bg-green-500 rounded-full mr-2"></span>
-                Conectado
-            </div>
-        </div>
-        
-        <div class="flex space-x-4 chat-container">
-            <!-- Panel Principal del Chat -->
-            <div class="flex-grow bg-white rounded-lg shadow overflow-hidden flex flex-col">
+    <div class="container mx-auto px-4 py-6">
+        <div class="max-w-3xl mx-auto">
+            <!-- Área de Chat -->
+            <div class="bg-white border border-gray-200 rounded min-h-[400px] flex flex-col">
                 <!-- Mensajes -->
                 <div class="flex-grow overflow-y-auto p-4 space-y-4" id="chat-messages">
-                    <div class="flex justify-end">
-                        <div class="bg-blue-100 text-blue-800 rounded-lg p-3 max-w-3/4">
-                            <p>Muéstrame una cronología de los sucesos recientes relacionados con la crisis diplomática entre España y Argentina:</p>
-                            <span class="text-xs text-blue-600 mt-1 block">12:45</span>
-                        </div>
-                    </div>
-                    
-                    <div class="flex justify-start">
-                        <div class="bg-gray-100 text-gray-800 rounded-lg p-3 max-w-3/4">
-                            <p>Aquí tienes la cronología de los sucesos más relevantes relacionados con la crisis diplomática entre España y Argentina:</p>
-                            <div class="mt-2 mb-2 pl-3 border-l-2 border-blue-500">
-                                <p class="mb-2"><strong>2 mayo 2025</strong>: El presidente argentino, Javier Milei, criticó duramente al gobierno español durante su discurso en la cumbre de Madrid, calificando sus políticas económicas como "fracasadas e ideologizadas".</p>
-                                <p class="mb-2"><strong>2 mayo 2025</strong>: El Gobierno español llamó a consultas al embajador en Argentina tras las declaraciones de Milei, calificándolas de "inaceptables y faltas de respeto institucional".</p>
-                                <p class="mb-2"><strong>3 mayo 2025</strong>: El ministro de Asuntos Exteriores de España convocó al embajador argentino en Madrid para expresar su malestar oficial por las declaraciones.</p>
-                            </div>
-                            <p>Estos eventos han escalado tensiones diplomáticas que venían acumulándose desde hace varias semanas con declaraciones cruzadas entre funcionarios de ambos países.</p>
-                            <div class="bg-gray-200 p-2 rounded mt-2 text-xs flex justify-between">
-                                <span>3 fuentes</span>
-                                <button class="text-blue-600 hover:underline">Ver fuentes</button>
-                            </div>
-                            <span class="text-xs text-gray-500 mt-1 block">12:47</span>
-                        </div>
-                    </div>
-                    
-                    <div class="flex justify-end">
-                        <div class="bg-blue-100 text-blue-800 rounded-lg p-3 max-w-3/4">
-                            <p>¿Puedes darme más información sobre Javier Milei?</p>
-                            <span class="text-xs text-blue-600 mt-1 block">12:48</span>
-                        </div>
-                    </div>
-                    
-                    <div class="flex justify-start">
-                        <div class="bg-gray-100 text-gray-800 rounded-lg p-3 max-w-3/4">
-                            <p><strong>Javier Milei</strong> es el presidente de Argentina desde diciembre de 2023. Es un economista, escritor y político libertario que llegó a la presidencia como candidato del partido La Libertad Avanza.</p>
-                            <p class="mt-2">Datos relevantes:</p>
-                            <ul class="list-disc pl-5 mt-1">
-                                <li>Antes de su carrera política, fue profesor de economía y comentarista frecuente en medios de comunicación.</li>
-                                <li>Se caracteriza por posiciones fuertemente liberales y críticas contra lo que él denomina "casta política".</li>
-                                <li>Ha mostrado tendencia a declaraciones polémicas en foros internacionales.</li>
-                                <li>Su gobierno ha implementado un programa de ajuste económico severo que incluye recortes significativos del gasto público.</li>
-                            </ul>
-                            <span class="text-xs text-gray-500 mt-1 block">12:49</span>
-                        </div>
+                    <!-- Mensaje inicial del hecho noticioso -->
+                    <div class="bg-gray-50 rounded p-4">
+                        <p id="hecho-inicial" class="text-sm">
+                            <!-- Contenido del hecho se cargará dinámicamente -->
+                        </p>
                     </div>
                 </div>
                 
                 <!-- Input del Chat -->
                 <div class="border-t p-4">
-                    <div class="flex flex-wrap gap-2 mb-2">
-                        <button class="bg-gray-200 hover:bg-gray-300 text-gray-700 text-sm py-1 px-2 rounded">Cronología</button>
-                        <button class="bg-gray-200 hover:bg-gray-300 text-gray-700 text-sm py-1 px-2 rounded">Perfil</button>
-                        <button class="bg-gray-200 hover:bg-gray-300 text-gray-700 text-sm py-1 px-2 rounded">Resumen Hilo</button>
-                        <button class="bg-gray-200 hover:bg-gray-300 text-gray-700 text-sm py-1 px-2 rounded">Comparar</button>
-                    </div>
                     <div class="relative">
                         <textarea
                             id="message-input"
-                            class="w-full border rounded-lg p-3 pr-16 resize-none h-20"
-                            placeholder="Escriba su consulta. Puede usar operadores como @Pais, #Fecha o +Término para mayor precisión..."
+                            class="w-full border border-gray-300 rounded p-2 resize-none h-16 text-sm"
+                            placeholder="Escriba su consulta..."
                         ></textarea>
                         <button
                             id="send-message"
-                            class="absolute right-2 bottom-2 bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+                            class="absolute right-2 bottom-2 primary"
                         >
                             Enviar
                         </button>
                     </div>
                 </div>
             </div>
-            
-            <!-- Panel Lateral de Contexto -->
-            <div class="w-80 bg-white rounded-lg shadow overflow-hidden flex flex-col">
-                <div class="p-2 border-b bg-gray-100 text-lg font-medium">
-                    Contexto de Investigación
-                </div>
-                
-                <div class="flex-grow overflow-y-auto p-4">
-                    <!-- Entidades Detectadas -->
-                    <div class="mb-4">
-                        <h3 class="text-base font-bold text-gray-700 mb-1">Entidades Detectadas</h3>
-                        
-                        <div class="mb-1">
-                            <h4 class="text-xs text-gray-500 mb-0.5">PERSONA</h4>
-                            <div class="flex flex-wrap gap-1">
-                                <span class="bg-gray-200 text-gray-700 py-0.5 px-2 rounded text-xs">
-                                    Javier Milei
-                                </span>
-                            </div>
-                        </div>
-                        
-                        <div class="mb-1">
-                            <h4 class="text-xs text-gray-500 mb-0.5">INSTITUCIÓN</h4>
-                            <div class="flex flex-wrap gap-1">
-                                <span class="bg-gray-200 text-gray-700 py-0.5 px-2 rounded text-xs">
-                                    Gobierno de España
-                                </span>
-                                <span class="bg-gray-200 text-gray-700 py-0.5 px-2 rounded text-xs">
-                                    Embajada de España en Argentina
-                                </span>
-                            </div>
-                        </div>
-                        
-                        <div class="mb-1">
-                            <h4 class="text-xs text-gray-500 mb-0.5">LUGAR</h4>
-                            <div class="flex flex-wrap gap-1">
-                                <span class="bg-gray-200 text-gray-700 py-0.5 px-2 rounded text-xs">
-                                    España
-                                </span>
-                                <span class="bg-gray-200 text-gray-700 py-0.5 px-2 rounded text-xs">
-                                    Argentina
-                                </span>
-                                <span class="bg-gray-200 text-gray-700 py-0.5 px-2 rounded text-xs">
-                                    Madrid
-                                </span>
-                            </div>
-                        </div>
-                        
-                        <div class="mb-1">
-                            <h4 class="text-xs text-gray-500 mb-0.5">EVENTO</h4>
-                            <div class="flex flex-wrap gap-1">
-                                <span class="bg-gray-200 text-gray-700 py-0.5 px-2 rounded text-xs">
-                                    Cumbre de Madrid
-                                </span>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <!-- Hilo Activo -->
-                    <div class="mb-4">
-                        <h3 class="text-base font-bold text-gray-700 mb-1">Hilo Activo</h3>
-                        <div class="bg-blue-50 p-2 rounded">
-                            <div class="text-sm font-medium text-blue-800">Crisis diplomática España-Argentina</div>
-                            <div class="text-xs text-blue-600">
-                                Seguimiento de las tensiones diplomáticas entre España y Argentina desencadenadas por las declaraciones del presidente Milei y sus repercusiones políticas.
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <!-- Mini-Cronología -->
-                    <div class="mb-4">
-                        <h3 class="text-base font-bold text-gray-700 mb-1">Mini-Cronología</h3>
-                        <div class="space-y-2">
-                            <div class="text-xs border-l-2 border-blue-500 pl-2 pb-2">
-                                <div class="text-gray-500">2 mayo 2025</div>
-                                <div>Milei crítica a España en Madrid</div>
-                            </div>
-                            <div class="text-xs border-l-2 border-blue-500 pl-2 pb-2">
-                                <div class="text-gray-500">2 mayo 2025</div>
-                                <div>España llama a consultas al embajador</div>
-                            </div>
-                            <div class="text-xs border-l-2 border-blue-500 pl-2">
-                                <div class="text-gray-500">3 mayo 2025</div>
-                                <div>Convocatoria al embajador argentino</div>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <!-- Consultas Sugeridas -->
-                    <div class="mb-4">
-                        <h3 class="text-base font-bold text-gray-700 mb-1">Consultas Sugeridas</h3>
-                        <div class="space-y-1">
-                            <button class="w-full text-left p-1 text-sm text-blue-600 hover:bg-blue-50 rounded">
-                                ¿Cuál fue la reacción del gobierno argentino?
-                            </button>
-                            <button class="w-full text-left p-1 text-sm text-blue-600 hover:bg-blue-50 rounded">
-                                Muestra las relaciones comerciales entre España y Argentina
-                            </button>
-                            <button class="w-full text-left p-1 text-sm text-blue-600 hover:bg-blue-50 rounded">
-                                Precedentes de crisis diplomáticas similares
-                            </button>
-                        </div>
-                    </div>
-                    
-                    <!-- Gestores -->
-                    <div class="flex space-x-2">
-                        <button class="flex-1 bg-blue-100 text-blue-600 py-1 px-2 rounded text-sm hover:bg-blue-200">
-                            Gestionar Hilos
-                        </button>
-                        <button class="flex-1 bg-blue-100 text-blue-600 py-1 px-2 rounded text-sm hover:bg-blue-200">
-                            Consultas Guardadas
-                        </button>
-                    </div>
-                </div>
-            </div>
         </div>
     </div>
-    
+
     <footer class="bg-gray-800 text-white p-4 mt-8">
         <div class="container mx-auto text-center">
             <p>Máquina de Noticias - Simulación Visual para Presentación</p>
         </div>
     </footer>
 
+    <script src="js/mockData.js"></script>
     <script>
         document.addEventListener('DOMContentLoaded', function() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const hechoId = parseInt(urlParams.get('hecho'));
+            
+            if (hechoId) {
+                const hecho = mockData.hechos.find(h => h.id === hechoId);
+                if (hecho) {
+                    // Mostrar explicación inicial del hecho
+                    const hechoInicial = document.getElementById('hecho-inicial');
+                    hechoInicial.textContent = generateExplicacion(hecho);
+                }
+            }
+            
+            // Configurar chat
             const messageInput = document.getElementById('message-input');
             const sendButton = document.getElementById('send-message');
             const chatMessages = document.getElementById('chat-messages');
             
-            // Simple sistema de mensaje para la demo
-            sendButton.addEventListener('click', function() {
+            sendButton.addEventListener('click', sendMessage);
+            messageInput.addEventListener('keypress', function(e) {
+                if (e.key === 'Enter' && !e.shiftKey) {
+                    e.preventDefault();
+                    sendMessage();
+                }
+            });
+            
+            function sendMessage() {
                 const message = messageInput.value.trim();
                 if (!message) return;
                 
                 // Añadir mensaje del usuario
-                const userMessageHtml = `
-                    <div class="flex justify-end">
-                        <div class="bg-blue-100 text-blue-800 rounded-lg p-3 max-w-3/4">
-                            <p>${message}</p>
-                            <span class="text-xs text-blue-600 mt-1 block">${getCurrentTime()}</span>
-                        </div>
+                const userMessageDiv = document.createElement('div');
+                userMessageDiv.className = 'text-right';
+                userMessageDiv.innerHTML = `
+                    <div class="inline-block bg-blue-50 text-blue-800 rounded p-3 max-w-[80%] text-sm">
+                        ${message}
                     </div>
                 `;
-                chatMessages.innerHTML += userMessageHtml;
+                chatMessages.appendChild(userMessageDiv);
                 
-                // Limpiar input
                 messageInput.value = '';
-                
-                // Scroll al final
                 chatMessages.scrollTop = chatMessages.scrollHeight;
                 
-                // Mensaje de respuesta simulado (después de un breve retraso)
+                // Simular respuesta
                 setTimeout(() => {
-                    const botMessageHtml = `
-                        <div class="flex justify-start">
-                            <div class="bg-gray-100 text-gray-800 rounded-lg p-3 max-w-3/4">
-                                <p>Esta es una simulación. El mensaje "${message}" sería procesado por el LLM en una implementación real.</p>
-                                <p class="mt-2">Para la presentación, puede interactuar con las partes ya implementadas o mostrar el flujo con los mensajes predefinidos.</p>
-                                <span class="text-xs text-gray-500 mt-1 block">${getCurrentTime()}</span>
-                            </div>
+                    const botMessageDiv = document.createElement('div');
+                    botMessageDiv.className = 'text-left';
+                    botMessageDiv.innerHTML = `
+                        <div class="inline-block bg-gray-50 text-gray-800 rounded p-3 max-w-[80%] text-sm">
+                            Esta es una simulación. En la implementación real, aquí aparecería una respuesta contextual basada en la consulta "${message}".
                         </div>
                     `;
-                    chatMessages.innerHTML += botMessageHtml;
+                    chatMessages.appendChild(botMessageDiv);
                     chatMessages.scrollTop = chatMessages.scrollHeight;
                 }, 1000);
-            });
-            
-            // Permitir enviar con Enter
-            messageInput.addEventListener('keypress', function(e) {
-                if (e.key === 'Enter' && !e.shiftKey) {
-                    e.preventDefault();
-                    sendButton.click();
-                }
-            });
-            
-            // Función para obtener la hora actual
-            function getCurrentTime() {
-                const now = new Date();
-                return now.toLocaleTimeString('es-ES', { hour: '2-digit', minute: '2-digit' });
             }
         });
+        
+        function generateExplicacion(hecho) {
+            // Generar una explicación de ~200 palabras basada en el hecho
+            const entidadesTexto = hecho.entidades_mencionadas?.join(', ') || '';
+            return `
+Este hecho noticioso se refiere a ${hecho.contenido}
+
+Ocurrido el ${new Date(hecho.fecha_ocurrencia.inicio).toLocaleDateString('es-ES', { 
+    day: 'numeric', 
+    month: 'long', 
+    year: 'numeric' 
+})}, este evento tiene una importancia de ${hecho.importancia} en una escala del 1 al 10 y ha sido clasificado como ${hecho.tipo_hecho}.
+
+${hecho.entidades_mencionadas ? `Las principales entidades mencionadas incluyen: ${entidadesTexto}.` : ''}
+
+Este hecho forma parte del hilo narrativo "${hecho.hilo_vinculado?.titulo}", el cual agrupa eventos relacionados que permiten entender el contexto más amplio de esta situación.
+
+Ha sido reportado por múltiples medios de comunicación, demostrando su relevancia en el panorama actual de noticias.
+
+¿Qué aspecto específico de este hecho te gustaría explorar más a fondo?
+            `.trim();
+        }
     </script>
 </body>
 </html>
