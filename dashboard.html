@@ -3,371 +3,95 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Máquina de Noticias - Dashboard de Revisión</title>
-    <!-- Tailwind CSS vía CDN -->
+    <title>Máquina de Noticias - Dashboard</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Estilos personalizados -->
     <link rel="stylesheet" href="css/custom.css">
 </head>
-<body class="bg-gray-100">
-    <nav class="bg-blue-600 text-white p-4">
+<body>
+    <nav class="p-4">
         <div class="container mx-auto flex justify-between items-center">
-            <h1 class="text-xl font-bold">Máquina de Noticias</h1>
-            <ul class="flex space-x-4">
-                <li><a href="index.html" class="hover:underline">Inicio</a></li>
-                <li><a href="dashboard.html" class="font-bold underline">Dashboard de Revisión</a></li>
-                <li><a href="chat.html" class="hover:underline">Chat de Investigación</a></li>
-                <li><a href="developer.html" class="hover:underline">Panel Desarrollador</a></li>
-                <li><a href="ingesta.html" class="hover:underline">Ingesta de Documentos</a></li>
+            <h1 class="text-lg">Máquina de Noticias</h1>
+            <ul class="flex space-x-6">
+                <li><a href="index.html">Inicio</a></li>
+                <li><a href="dashboard.html" class="font-medium">Dashboard</a></li>
+                <li><a href="chat.html">Chat de Investigación</a></li>
+                <li><a href="developer.html">Panel Desarrollador</a></li>
+                <li><a href="ingesta.html">Ingesta de Documentos</a></li>
             </ul>
         </div>
     </nav>
 
-    <div class="container mx-auto px-4 py-8">
-        <h1 class="text-3xl font-bold mb-8">Dashboard de Revisión</h1>
-        
-        <!-- Panel de Artículos con Problemas -->
-        <div id="articulos-problemas" class="bg-white rounded-lg shadow mb-8">
-            <button id="toggle-problemas" class="w-full p-4 flex justify-between items-center border-b focus:outline-none">
-                <span class="text-xl text-red-600 flex items-center">
-                    <svg class="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-                        <path fill-rule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clip-rule="evenodd" />
-                    </svg>
-                    Artículos con Problemas (<span id="problemas-count">3</span>)
-                </span>
-                <svg class="w-5 h-5 transform" id="problemas-arrow" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+    <div class="container mx-auto px-4 py-6">
+        <!-- Artículos con Problemas (plegable) -->
+        <div class="filtros-container">
+            <button id="toggle-problemas" class="toggle-filtros w-full">
+                <span>Artículos con Problemas <span id="problemas-count" class="ml-2">(3)</span></span>
+                <svg class="w-4 h-4" id="problemas-arrow" fill="currentColor" viewBox="0 0 20 20">
                     <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" />
                 </svg>
             </button>
             
             <div id="problemas-content" class="p-4 hidden">
-                <div class="overflow-x-auto">
-                    <table class="min-w-full">
-                        <thead>
-                            <tr class="bg-gray-100">
-                                <th class="p-2 text-left">Titular</th>
-                                <th class="p-2 text-left">Medio</th>
-                                <th class="p-2 text-left">Fecha</th>
-                                <th class="p-2 text-left">Estado</th>
-                                <th class="p-2 text-left">Acciones</th>
-                            </tr>
-                        </thead>
-                        <tbody id="problemas-list">
-                            <!-- Contenido dinámico desde JavaScript -->
-                        </tbody>
-                    </table>
-                </div>
+                <ul id="problemas-list" class="list-disc pl-5 space-y-2">
+                    <!-- Contenido dinámico -->
+                </ul>
             </div>
         </div>
         
-        <!-- Filtros -->
-        <div class="bg-white rounded-lg shadow mb-8 p-4">
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-4">
-                <div>
-                    <label class="text-lg font-bold mb-2 block">Período</label>
-                    <select id="periodo-filter" class="border rounded p-2 w-full mb-2">
-                        <option value="ultimas-24h">Últimas 24h</option>
-                        <option value="ultimos-3-dias">Últimos 3 días</option>
-                        <option value="semana-pasada">Semana pasada</option>
-                        <option value="personalizado">Rango personalizado</option>
-                    </select>
+        <!-- Filtros plegables -->
+        <div class="filtros-container mb-6">
+            <button id="toggle-filtros" class="toggle-filtros w-full">
+                <span>Filtros</span>
+                <svg class="w-4 h-4" id="filtros-arrow" fill="currentColor" viewBox="0 0 20 20">
+                    <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" />
+                </svg>
+            </button>
+            
+            <div id="filtros-content" class="p-4 hidden">
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <div>
+                        <label class="text-sm font-medium mb-1 block">Período</label>
+                        <select id="periodo-filter" class="border border-gray-300 rounded p-1 w-full text-sm">
+                            <option value="ultimas-24h">Últimas 24h</option>
+                            <option value="ultimos-3-dias">Últimos 3 días</option>
+                            <option value="ultimos-4-dias">Últimos 4 días</option>
+                        </select>
+                    </div>
                     
-                    <div id="fecha-personalizada" class="hidden flex space-x-2">
-                        <input type="date" class="border rounded p-2 flex-1" id="fecha-inicio">
-                        <input type="date" class="border rounded p-2 flex-1" id="fecha-fin">
+                    <div>
+                        <label class="text-sm font-medium mb-1 block">Orden</label>
+                        <select id="orden-filter" class="border border-gray-300 rounded p-1 w-full text-sm">
+                            <option value="relevancia">Por relevancia</option>
+                            <option value="fecha_desc">Fecha ↓</option>
+                            <option value="fecha_asc">Fecha ↑</option>
+                        </select>
+                    </div>
+                    
+                    <div class="flex items-end">
+                        <button id="aplicar-filtros" class="primary w-full">
+                            Aplicar Filtros
+                        </button>
                     </div>
                 </div>
-                
-                <div>
-                    <label class="text-lg font-bold mb-2 block">Ordenar por</label>
-                    <select id="orden-filter" class="border rounded p-2 w-full">
-                        <option value="fecha_ingreso_desc">Fecha ingreso ↓</option>
-                        <option value="fecha_ingreso_asc">Fecha ingreso ↑</option>
-                        <option value="importancia_desc">Importancia ↓</option>
-                        <option value="importancia_asc">Importancia ↑</option>
-                        <option value="fecha_publicacion_desc">Fecha publicación ↓</option>
-                    </select>
-                </div>
-                
-                <div class="flex items-end">
-                    <button id="aplicar-filtros" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded w-full">
-                        Aplicar Filtros
-                    </button>
-                </div>
-            </div>
-            
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-                <div>
-                    <label class="text-lg font-bold mb-2 block">Países</label>
-                    <select id="paises-filter" class="border rounded p-2 w-full" multiple size="4">
-                        <option value="argentina">Argentina</option>
-                        <option value="chile">Chile</option>
-                        <option value="colombia">Colombia</option>
-                        <option value="españa">España</option>
-                        <option value="méxico">México</option>
-                    </select>
-                </div>
-                
-                <div>
-                    <label class="text-lg font-bold mb-2 block">Medios</label>
-                    <select id="medios-filter" class="border rounded p-2 w-full" multiple size="4">
-                        <option value="el_pais">El País</option>
-                        <option value="el_mundo">El Mundo</option>
-                        <option value="clarin">Clarín</option>
-                        <option value="la_nacion">La Nación</option>
-                        <option value="el_universal">El Universal</option>
-                    </select>
-                </div>
-                
-                <div>
-                    <label class="text-lg font-bold mb-2 block">Categorías</label>
-                    <select id="categorias-filter" class="border rounded p-2 w-full" multiple size="4">
-                        <option value="politica">Política</option>
-                        <option value="economia">Economía</option>
-                        <option value="internacional">Internacional</option>
-                        <option value="sociedad">Sociedad</option>
-                        <option value="cultura">Cultura</option>
-                        <option value="deportes">Deportes</option>
-                    </select>
-                </div>
             </div>
         </div>
         
-        <!-- Paginación Superior -->
-        <div class="bg-white rounded-lg shadow mb-4 p-4">
-            <div class="flex justify-between items-center">
-                <div class="text-gray-600">
-                    Mostrando <span id="rango-inicio">1</span>-<span id="rango-fin">20</span> de <span id="total-hechos">120</span> hechos
-                </div>
-                <div class="flex items-center space-x-2">
-                    <button id="prev-page" class="bg-gray-200 hover:bg-gray-300 text-gray-700 font-bold py-1 px-3 rounded disabled:opacity-50 disabled:cursor-not-allowed">
-                        Anterior
-                    </button>
-                    <div class="bg-white border rounded py-1 px-3 text-gray-700">
-                        Página <span id="pagina-actual">1</span> de <span id="total-paginas">6</span>
-                    </div>
-                    <button id="next-page" class="bg-gray-200 hover:bg-gray-300 text-gray-700 font-bold py-1 px-3 rounded disabled:opacity-50 disabled:cursor-not-allowed">
-                        Siguiente
-                    </button>
-                </div>
-            </div>
-        </div>
-        
-        <!-- Lista de Hechos -->
-        <div id="hechos-list">
-            <!-- Contenido dinámico desde JavaScript -->
-        </div>
-        
-        <!-- Paginación Inferior -->
-        <div class="mt-8 flex justify-center">
-            <div class="flex space-x-2">
-                <button id="first-page" class="bg-gray-200 hover:bg-gray-300 text-gray-700 font-bold py-1 px-3 rounded disabled:opacity-50 disabled:cursor-not-allowed">
-                    «
-                </button>
-                <button id="prev-page-bottom" class="bg-gray-200 hover:bg-gray-300 text-gray-700 font-bold py-1 px-3 rounded disabled:opacity-50 disabled:cursor-not-allowed">
-                    ‹
-                </button>
-                
-                <div id="page-numbers" class="flex space-x-2">
-                    <!-- Números de página dinámicos -->
-                </div>
-                
-                <button id="next-page-bottom" class="bg-gray-200 hover:bg-gray-300 text-gray-700 font-bold py-1 px-3 rounded disabled:opacity-50 disabled:cursor-not-allowed">
-                    ›
-                </button>
-                <button id="last-page" class="bg-gray-200 hover:bg-gray-300 text-gray-700 font-bold py-1 px-3 rounded disabled:opacity-50 disabled:cursor-not-allowed">
-                    »
-                </button>
-            </div>
+        <!-- Lista de Hechos organizados por hilos -->
+        <div id="hilos-list">
+            <!-- Contenido dinámico -->
         </div>
     </div>
     
-    <!-- Modal Crear Hilo -->
-    <div id="crear-hilo-modal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden">
-        <div class="bg-white rounded-lg max-w-xl w-full max-h-screen overflow-y-auto p-6">
-            <h2 class="text-2xl font-bold mb-4">Crear Nuevo Hilo Narrativo</h2>
-            
-            <div id="modal-error" class="hidden bg-red-100 border border-red-400 text-red-700 p-4 rounded mb-4">
-                El título es obligatorio
-            </div>
-            
-            <div class="mb-4">
-                <label class="block text-gray-700 font-bold mb-2">
-                    Título <span class="text-red-600">*</span>
-                </label>
-                <input
-                    type="text"
-                    id="hilo-titulo"
-                    class="w-full border rounded p-2"
-                    placeholder="Título del hilo narrativo"
-                    required
-                >
-            </div>
-            
-            <div class="mb-4">
-                <label class="block text-gray-700 font-bold mb-2">
-                    Descripción
-                </label>
-                <textarea
-                    id="hilo-descripcion"
-                    class="w-full border rounded p-2"
-                    rows="3"
-                    placeholder="Descripción opcional del hilo"
-                ></textarea>
-            </div>
-            
-            <div class="mb-4">
-                <label class="block text-gray-700 font-bold mb-2">
-                    Países Principales
-                </label>
-                <div class="flex">
-                    <input
-                        type="text"
-                        id="nuevo-pais"
-                        class="flex-1 border rounded-l p-2"
-                        placeholder="Agregar país"
-                    >
-                    <button
-                        type="button"
-                        id="agregar-pais"
-                        class="bg-blue-600 hover:bg-blue-700 text-white font-bold px-4 rounded-r"
-                    >
-                        +
-                    </button>
-                </div>
-                <div id="paises-tags" class="flex flex-wrap mt-2">
-                    <!-- Tags dinámicos -->
-                </div>
-            </div>
-            
-            <div class="mb-4">
-                <label class="block text-gray-700 font-bold mb-2">
-                    Etiquetas Principales
-                </label>
-                <div class="flex">
-                    <input
-                        type="text"
-                        id="nueva-etiqueta"
-                        class="flex-1 border rounded-l p-2"
-                        placeholder="Agregar etiqueta"
-                    >
-                    <button
-                        type="button"
-                        id="agregar-etiqueta"
-                        class="bg-blue-600 hover:bg-blue-700 text-white font-bold px-4 rounded-r"
-                    >
-                        +
-                    </button>
-                </div>
-                <div id="etiquetas-tags" class="flex flex-wrap mt-2">
-                    <!-- Tags dinámicos -->
-                </div>
-            </div>
-            
-            <div class="mb-6">
-                <label class="block text-gray-700 font-bold mb-2">
-                    Relevancia Editorial: <span id="relevancia-valor">5</span>
-                </label>
-                <input
-                    type="range"
-                    id="relevancia-slider"
-                    min="1"
-                    max="10"
-                    value="5"
-                    class="w-full"
-                >
-                <div class="flex justify-between text-sm text-gray-500">
-                    <span>Baja</span>
-                    <span>Media</span>
-                    <span>Alta</span>
-                </div>
-            </div>
-            
-            <div class="flex justify-end">
-                <button
-                    type="button"
-                    id="cancelar-hilo"
-                    class="bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-4 rounded mr-2"
-                >
-                    Cancelar
-                </button>
-                <button
-                    type="button"
-                    id="crear-hilo"
-                    class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
-                >
-                    Crear
-                </button>
-            </div>
-        </div>
-    </div>
-    
-    <!-- Modal Vincular Hilo -->
-    <div id="vincular-hilo-modal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden">
-        <div class="bg-white rounded-lg w-64 shadow-lg">
-            <div class="p-2 border-b">
-                <input
-                    type="text"
-                    id="buscar-hilo"
-                    class="w-full p-2 border rounded"
-                    placeholder="Buscar hilos..."
-                    autocomplete="off"
-                >
-            </div>
-            
-            <div class="max-h-60 overflow-y-auto" id="hilos-lista">
-                <!-- Lista dinámica de hilos -->
-            </div>
-        </div>
-    </div>
-    
-    <!-- Modal Notas sobre Entidad -->
-    <div id="notas-modal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden">
-        <div class="bg-white rounded-lg max-w-lg w-full p-6">
-            <h2 class="text-xl font-bold mb-4">Notas sobre <span id="entidad-nombre">Nombre Entidad</span></h2>
-            
-            <div class="mb-2">
-                <span class="font-medium">Tipo:</span> <span id="entidad-tipo">PERSONA</span>
-            </div>
-            
-            <div class="mb-4">
-                <label class="block text-gray-700 font-bold mb-2">
-                    Notas
-                </label>
-                <textarea
-                    id="entidad-notas"
-                    class="w-full border rounded p-2"
-                    rows="5"
-                    placeholder="Agregar notas sobre esta entidad..."
-                ></textarea>
-            </div>
-            
-            <div class="flex justify-end">
-                <button
-                    type="button"
-                    id="cancelar-notas"
-                    class="bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-4 rounded mr-2"
-                >
-                    Cancelar
-                </button>
-                <button
-                    type="button"
-                    id="guardar-notas"
-                    class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
-                >
-                    Guardar
-                </button>
-            </div>
+    <!-- Modal Menciones -->
+    <div id="menciones-modal" class="fixed inset-0 bg-black bg-opacity-10 flex items-center justify-center z-50 hidden">
+        <div class="menciones-popup w-96">
+            <h3 class="text-sm font-medium mb-2">Artículos relacionados</h3>
+            <ul id="menciones-list" class="space-y-2">
+                <!-- Lista dinámica -->
+            </ul>
         </div>
     </div>
 
-    <footer class="bg-gray-800 text-white p-4 mt-8">
-        <div class="container mx-auto text-center">
-            <p>Máquina de Noticias - Simulación Visual para Presentación</p>
-        </div>
-    </footer>
-    
-    <!-- Scripts -->
     <script src="js/mockData.js"></script>
     <script src="js/dashboard.js"></script>
 </body>
