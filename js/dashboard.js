@@ -138,7 +138,7 @@ function createHiloBlock(hilo, index) {
     
     const title = document.createElement('h3');
     title.className = 'thread-title text-lg';
-    title.textContent = `[${hilo.titulo}]`;
+    title.textContent = hilo.titulo; // Sin corchetes
     
     titleAndDrag.appendChild(dragHandle);
     titleAndDrag.appendChild(title);
@@ -198,16 +198,16 @@ function createHiloBlock(hilo, index) {
     hilo.paises.forEach(pais => {
         const tag = document.createElement('span');
         tag.className = 'country-tag';
-        tag.textContent = `[${pais}]`;
+        tag.textContent = pais; // Sin corchetes
         countries.appendChild(tag);
     });
     
-    const sourcesButton = document.createElement('button');
-    sourcesButton.className = 'sources-button';
-    sourcesButton.textContent = `Menciones: ${getTotalMentions(hilo.fuentes)} fuentes`;
-    sourcesButton.addEventListener('click', (e) => {
+    const sourcesLink = document.createElement('button');
+    sourcesLink.className = 'text-sm text-gray-600 hover:text-black font-thin';
+    sourcesLink.textContent = `${getTotalMentions(hilo.fuentes)} fuentes`;
+    sourcesLink.addEventListener('click', (e) => {
         e.stopPropagation();
-        showSources(hilo.fuentes);
+        showSources(hilo.fuentes, hilo.titulo);
     });
     
     footer.appendChild(countries);
@@ -628,13 +628,67 @@ function openHechoDetalle(hecho) {
     modal.classList.remove('hidden');
 }
 
-// Mostrar fuentes
-function showSources(fuentes) {
-    let sourceText = 'Fuentes:\n\n';
-    fuentes.forEach(f => {
-        sourceText += `${f.medio}: ${f.cantidad} artículo${f.cantidad > 1 ? 's' : ''}\n`;
+// Mostrar fuentes con modal elegante
+function showSources(fuentes, hiloTitulo) {
+    // Crear modal dinámicamente
+    const modal = document.createElement('div');
+    modal.className = 'fixed inset-0 bg-black bg-opacity-5 flex items-center justify-center z-50';
+    
+    const content = document.createElement('div');
+    content.className = 'bg-white border border-beige-200 rounded-sm w-96 shadow-sm';
+    
+    // Header del modal
+    const header = document.createElement('div');
+    header.className = 'p-4 border-b border-beige-200';
+    header.innerHTML = `
+        <h3 class="text-lg font-thin text-black">Fuentes para "${hiloTitulo}"</h3>
+    `;
+    
+    // Lista de fuentes
+    const list = document.createElement('div');
+    list.className = 'p-4 space-y-4';
+    
+    fuentes.forEach(fuente => {
+        const sourceItem = document.createElement('div');
+        sourceItem.className = 'border-b border-beige-100 pb-3 last:border-0';
+        sourceItem.innerHTML = `
+            <div class="font-thin text-black">${fuente.medio}</div>
+            <div class="text-sm text-beige-700 mt-1">${fuente.cantidad} ${fuente.cantidad === 1 ? 'artículo' : 'artículos'}</div>
+            <div class="mt-2">
+                <a href="#" class="text-sm text-black hover:underline inline-flex items-center">
+                    Ver detalles 
+                    <svg class="w-3 h-3 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                    </svg>
+                </a>
+            </div>
+        `;
+        list.appendChild(sourceItem);
     });
-    alert(sourceText);
+    
+    // Footer del modal
+    const footer = document.createElement('div');
+    footer.className = 'p-4 border-t border-beige-200';
+    
+    const closeButton = document.createElement('button');
+    closeButton.className = 'w-full p-2 border border-beige-300 text-black hover:bg-beige-50 font-thin';
+    closeButton.textContent = 'Cerrar';
+    closeButton.addEventListener('click', () => modal.remove());
+    
+    footer.appendChild(closeButton);
+    
+    // Construir el modal
+    content.appendChild(header);
+    content.appendChild(list);
+    content.appendChild(footer);
+    modal.appendChild(content);
+    
+    // Cerrar al hacer clic fuera
+    modal.addEventListener('click', (e) => {
+        if (e.target === modal) modal.remove();
+    });
+    
+    document.body.appendChild(modal);
 }
 
 // Formatear fecha
