@@ -13,10 +13,10 @@ document.addEventListener('DOMContentLoaded', function() {
         const hilo = mockData.hilosNarrativos.find(h => h.id === parseInt(hiloId));
         if (hilo) {
             loadHiloContext(hilo);
-            // Si no hay hechoId pero hay hilo, usar el titular principal
+            // Si no hay hechoId pero hay hilo, generar explicación detallada
             if (!hechoId) {
                 const hechoInicial = document.getElementById('hecho-inicial');
-                hechoInicial.textContent = `Investigando: ${hilo.titular_principal}`;
+                hechoInicial.innerHTML = generateHiloExplicacion(hilo);
             }
         }
     }
@@ -192,6 +192,59 @@ function findHechoById(id) {
     }
     
     return null;
+}
+
+function generateHiloExplicacion(hilo) {
+    const totalHechos = hilo.hechos.length;
+    const primerHecho = hilo.hechos.reduce((prev, current) => 
+        new Date(prev.fecha) < new Date(current.fecha) ? prev : current
+    );
+    const ultimoHecho = hilo.hechos.reduce((prev, current) => 
+        new Date(prev.fecha) > new Date(current.fecha) ? prev : current
+    );
+    
+    const paisesText = hilo.paises.join(', ');
+    const fuentesTotal = getTotalMentionsForHilo(hilo.fuentes);
+    
+    return `
+        <div class="prose prose-sm">
+            <h3 class="text-lg font-bold mb-3">${hilo.titular_principal}</h3>
+            
+            <p class="mb-4">
+                Este hilo narrativo aborda <strong>${hilo.titulo}</strong>, 
+                un desarrollo de alta relevancia (<strong>${hilo.relevancia}/10</strong>) en el panorama informativo actual.
+            </p>
+            
+            <div class="bg-blue-50 border-l-4 border-blue-400 p-4 mb-4">
+                <p><strong>Seguimiento:</strong> ${totalHechos} eventos documentados</p>
+                <p><strong>Período:</strong> ${formatDate(primerHecho.fecha)} - ${formatDate(ultimoHecho.fecha)}</p>
+                <p><strong>Cobertura:</strong> ${hilo.paises.length > 0 ? paisesText : 'Regional'}</p>
+            </div>
+            
+            <h4 class="font-bold mb-2">Desarrollo actual</h4>
+            <p class="mb-4">
+                Los acontecimientos recientes indican ${ultimoHecho.contenido.toLowerCase()}, 
+                lo que representa el último avance significativo en esta línea de investigación.
+            </p>
+            
+            <div class="mb-4">
+                <h4 class="font-bold mb-2">Fuentes principales</h4>
+                <ul class="list-disc list-inside">
+                    ${hilo.fuentes.map(fuente => `
+                        <li>${fuente.medio}: ${fuente.cantidad} ${fuente.cantidad === 1 ? 'reporte' : 'reportes'}</li>
+                    `).join('')}
+                </ul>
+            </div>
+            
+            <p class="text-sm text-gray-600 italic">
+                Puede consultar sobre cualquier aspecto específico de este hilo narrativo para obtener información más detallada.
+            </p>
+        </div>
+    `;
+}
+
+function getTotalMentionsForHilo(fuentes) {
+    return fuentes.reduce((total, f) => total + f.cantidad, 0);
 }
 
 function generateExplicacion(hecho) {
