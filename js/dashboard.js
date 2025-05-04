@@ -116,7 +116,7 @@ function renderHilosNarrativos() {
 // Crear bloque de hilo narrativo
 function createHiloBlock(hilo, index) {
     const block = document.createElement('div');
-    block.className = 'bg-white rounded-lg shadow border border-gray-200 overflow-hidden thread-block';
+    block.className = 'bg-white rounded-lg shadow border border-gray-200 overflow-hidden thread-block cursor-pointer';
     block.dataset.hiloId = hilo.id;
     block.dataset.index = index;
     block.setAttribute('draggable', 'true');
@@ -131,7 +131,10 @@ function createHiloBlock(hilo, index) {
     const dragHandle = document.createElement('div');
     dragHandle.className = 'thread-handle drag-handle';
     dragHandle.innerHTML = '☰';
-    dragHandle.addEventListener('dblclick', () => openRelevanceModal(hilo.id, hilo.relevancia));
+    dragHandle.addEventListener('dblclick', (e) => {
+        e.stopPropagation();
+        openRelevanceModal(hilo.id, hilo.relevancia);
+    });
     
     const title = document.createElement('h3');
     title.className = 'thread-title text-lg';
@@ -167,9 +170,12 @@ function createHiloBlock(hilo, index) {
         factContent.className = 'flex items-center';
         
         const factText = document.createElement('span');
-        factText.className = 'fact-text cursor-pointer';
+        factText.className = 'fact-text cursor-pointer hover:text-blue-600';
         factText.textContent = hecho.contenido;
-        factText.addEventListener('click', () => openHechoDetalle(hecho));
+        factText.addEventListener('click', (e) => {
+            e.stopPropagation();
+            openHechoDetalle(hecho);
+        });
         
         factContent.appendChild(factText);
         
@@ -199,7 +205,10 @@ function createHiloBlock(hilo, index) {
     const sourcesButton = document.createElement('button');
     sourcesButton.className = 'sources-button';
     sourcesButton.textContent = `Menciones: ${getTotalMentions(hilo.fuentes)} fuentes`;
-    sourcesButton.addEventListener('click', () => showSources(hilo.fuentes));
+    sourcesButton.addEventListener('click', (e) => {
+        e.stopPropagation();
+        showSources(hilo.fuentes);
+    });
     
     footer.appendChild(countries);
     footer.appendChild(sourcesButton);
@@ -209,6 +218,16 @@ function createHiloBlock(hilo, index) {
     block.appendChild(mainHeadline);
     block.appendChild(factsList);
     block.appendChild(footer);
+    
+    // Agregar funcionalidad de clic para navegar al chat
+    block.addEventListener('click', function(e) {
+        // No navegar si se hace clic en un elemento interactivo
+        if (e.target.closest('button') || e.target.closest('.drag-handle')) {
+            return;
+        }
+        // Navegar al chat con el contexto del hilo
+        window.location.href = `chat.html?hilo=${hilo.id}`;
+    });
     
     return block;
 }
