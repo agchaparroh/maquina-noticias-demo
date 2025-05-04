@@ -5,7 +5,7 @@ const mockData = {
         {
             id: 1,
             titulo: "Conflicto entre FARC y ELN en Arauca",
-            relevancia: 9,
+            relevancia: 10,
             titular_principal: "Intensos combates entre FARC y ELN dejan decenas de muertos en Arauca",
             hechos: [
                 {
@@ -47,7 +47,7 @@ const mockData = {
         {
             id: 2,
             titulo: "Crisis institucional en Guatemala",
-            relevancia: 7,
+            relevancia: 9,
             titular_principal: "Escándalo de corrupción sacude el sistema de justicia guatemalteco",
             hechos: [
                 {
@@ -67,6 +67,15 @@ const mockData = {
                     importancia: 7,
                     url: "https://elperiodico.com.gt/protestas-justicia",
                     hilo_id: 2
+                },
+                {
+                    id: 106,
+                    contenido: "Presidente guatemalteco convoca a diálogo nacional sobre reforma judicial",
+                    fecha: "2024-03-17T08:45:00",
+                    medio: "Soy502",
+                    importancia: 8,
+                    url: "https://www.soy502.com/dialogo-reforma-judicial",
+                    hilo_id: 2
                 }
             ],
             fuentes: [
@@ -75,6 +84,186 @@ const mockData = {
                 { medio: "Soy502", cantidad: 3 }
             ],
             paises: ["Guatemala"]
+        },
+        {
+            id: 3,
+            titulo: "Reforma pensional en Colombia",
+            relevancia: 8,
+            titular_principal: "Congreso colombiano aprueba en primera instancia reforma pensional",
+            hechos: [
+                {
+                    id: 107,
+                    contenido: "Senado colombiano aprueba reforma pensional con 52 votos a favor",
+                    fecha: "2024-03-18T16:20:00",
+                    medio: "El Colombiano",
+                    importancia: 8,
+                    url: "https://www.elcolombiano.com/senado-aprueba-reforma",
+                    hilo_id: 3
+                },
+                {
+                    id: 108,
+                    contenido: "Pensionados protestan en Bogotá contra nueva reforma",
+                    fecha: "2024-03-19T09:00:00",
+                    medio: "RCN Radio",
+                    importancia: 6,
+                    url: "https://www.rcnradio.com/protestas-pensionados",
+                    hilo_id: 3
+                },
+                {
+                    id: 109,
+                    contenido: "Analistas evalúan impacto económico de reforma pensional",
+                    fecha: "2024-03-19T14:30:00",
+                    medio: "Portafolio",
+                    importancia: 7,
+                    url: "https://www.portafolio.co/analisis-reforma",
+                    hilo_id: 3
+                }
+            ],
+            fuentes: [
+                { medio: "El Colombiano", cantidad: 7 },
+                { medio: "RCN Radio", cantidad: 4 },
+                { medio: "Portafolio", cantidad: 5 },
+                { medio: "El Espectador", cantidad: 3 }
+            ],
+            paises: ["Colombia"]
+        },
+        {
+            id: 4,
+            titulo: "Elecciones presidenciales en Argentina",
+            relevancia: 8,
+            titular_principal: "Javier Milei gana primera vuelta presidencial en Argentina",
+            hechos: [
+                {
+                    id: 110,
+                    contenido: "Javier Milei sorprende con victoria en primera vuelta electoral",
+                    fecha: "2024-03-17T22:30:00",
+                    medio: "La Nación",
+                    importancia: 9,
+                    url: "https://www.lanacion.com.ar/milei-primera-vuelta",
+                    hilo_id: 4
+                },
+                {
+                    id: 111,
+                    contenido: "Mercados financieros argentinos reaccionan a resultados electorales",
+                    fecha: "2024-03-18T09:15:00",
+                    medio: "Ámbito",
+                    importancia: 7,
+                    url: "https://www.ambito.com/mercados-elecciones",
+                    hilo_id: 4
+                },
+                {
+                    id: 112,
+                    contenido: "Analistas internacionales evalúan impacto de nueva presidencia en Argentina",
+                    fecha: "2024-03-18T13:45:00",
+                    medio: "Clarín",
+                    importancia: 8,
+                    url: "https://www.clarin.com/analisis-internacional",
+                    hilo_id: 4
+                }
+            ],
+            fuentes: [
+                { medio: "La Nación", cantidad: 12 },
+                { medio: "Clarín", cantidad: 8 },
+                { medio: "Ámbito", cantidad: 6 },
+                { medio: "Perfil", cantidad: 5 }
+            ],
+            paises: ["Argentina", "Brasil", "Uruguay"]
+        },
+        {
+            id: 5,
+            titulo: "Tensiones fronterizas Ecuador-Colombia",
+            relevancia: 7,
+            titular_principal: "Ecuador refuerza vigilancia fronteriza tras ataques de grupos ilegales",
+            hechos: [
+                {
+                    id: 113,
+                    contenido: "Ecuador moviliza tropas a la frontera con Colombia por incursiones armadas",
+                    fecha: "2024-03-16T11:20:00",
+                    medio: "El Universo",
+                    importancia: 7,
+                    url: "https://www.eluniverso.com/tropas-frontera",
+                    hilo_id: 5
+                },
+                {
+                    id: 114,
+                    contenido: "Colombia y Ecuador coordinan operativo conjunto para neutralizar amenazas",
+                    fecha: "2024-03-17T15:30:00",
+                    medio: "El Tiempo",
+                    importancia: 8,
+                    url: "https://www.eltiempo.com/operativo-conjunto",
+                    hilo_id: 5
+                }
+            ],
+            fuentes: [
+                { medio: "El Universo", cantidad: 6 },
+                { medio: "El Tiempo", cantidad: 5 },
+                { medio: "La Hora", cantidad: 4 }
+            ],
+            paises: ["Ecuador", "Colombia"]
+        },
+        {
+            id: 6,
+            titulo: "Crisis política en Perú",
+            relevancia: 7,
+            titular_principal: "Dina Boluarte enfrenta solicitud de vacancia presidencial",
+            hechos: [
+                {
+                    id: 115,
+                    contenido: "Congreso peruano admite moción de vacancia contra presidenta Boluarte",
+                    fecha: "2024-03-18T10:00:00",
+                    medio: "El Comercio",
+                    importancia: 8,
+                    url: "https://elcomercio.pe/congreso-vacancia",
+                    hilo_id: 6
+                },
+                {
+                    id: 116,
+                    contenido: "Protestas en Lima exigen renuncia de la presidenta",
+                    fecha: "2024-03-18T17:45:00",
+                    medio: "RPP Noticias",
+                    importancia: 7,
+                    url: "https://rpp.pe/protestas-lima",
+                    hilo_id: 6
+                }
+            ],
+            fuentes: [
+                { medio: "El Comercio", cantidad: 9 },
+                { medio: "RPP Noticias", cantidad: 6 },
+                { medio: "La República", cantidad: 7 }
+            ],
+            paises: ["Perú"]
+        },
+        {
+            id: 7,
+            titulo: "Migración en México",
+            relevancia: 6,
+            titular_principal: "México registra aumento del 40% en solicitudes de asilo",
+            hechos: [
+                {
+                    id: 117,
+                    contenido: "AMLO anuncia plan para gestionar aumento de solicitudes de asilo",
+                    fecha: "2024-03-18T09:30:00",
+                    medio: "Reforma",
+                    importancia: 6,
+                    url: "https://www.reforma.com/plan-asilo",
+                    hilo_id: 7
+                },
+                {
+                    id: 118,
+                    contenido: "CNDH recomienda mejoras en condiciones de albergues para migrantes",
+                    fecha: "2024-03-19T11:15:00",
+                    medio: "El Universal",
+                    importancia: 5,
+                    url: "https://www.eluniversal.com.mx/cndh-albergues",
+                    hilo_id: 7
+                }
+            ],
+            fuentes: [
+                { medio: "Reforma", cantidad: 5 },
+                { medio: "El Universal", cantidad: 6 },
+                { medio: "Proceso", cantidad: 4 }
+            ],
+            paises: ["México", "Estados Unidos", "Nicaragua"]
         }
     ],
     
@@ -118,6 +307,46 @@ const mockData = {
             medio: "National Geographic",
             importancia: 4,
             url: "https://www.nationalgeographicla.com/nueva-ave-choco"
+        },
+        {
+            id: 206,
+            contenido: "América Latina crecerá 2.1% en 2024 según FMI",
+            fecha: "2024-03-19T10:30:00",
+            medio: "Bloomberg Línea",
+            importancia: 7,
+            url: "https://www.bloomberglinea.com/fmi-latam-2024"
+        },
+        {
+            id: 207,
+            contenido: "Inteligencia artificial revoluciona sector educativo en Brasil",
+            fecha: "2024-03-19T11:15:00",
+            medio: "O Globo",
+            importancia: 6,
+            url: "https://oglobo.globo.com/ia-educacao"
+        },
+        {
+            id: 208,
+            contenido: "Descubren yacimiento de litio en Chile valorado en $150 mil millones",
+            fecha: "2024-03-19T13:30:00",
+            medio: "La Tercera",
+            importancia: 8,
+            url: "https://www.latercera.com/yacimiento-litio"
+        },
+        {
+            id: 209,
+            contenido: "Científicos chilenos crean vacuna contra hantavirus",
+            fecha: "2024-03-19T15:00:00",
+            medio: "El Mercurio",
+            importancia: 7,
+            url: "https://www.elmercurio.com/vacuna-hantavirus"
+        },
+        {
+            id: 210,
+            contenido: "Plataforma digital conecta productores rurales con mercados urbanos",
+            fecha: "2024-03-19T16:45:00",
+            medio: "La Prensa",
+            importancia: 5,
+            url: "https://prensa.com/plataforma-rural-urbana"
         }
     ],
     
@@ -145,6 +374,38 @@ const mockData = {
             estado: "VERIFICAR",
             error: "Inconsistencias en las cifras mencionadas (inversión $500M vs $800M)",
             url: "https://www.bluradio.com/proyecto-minero-choco"
+        },
+        {
+            titular: "Explosión en refinería de Barrancabermeja deja múltiples heridos",
+            medio: "El Heraldo",
+            fecha: "18/03/24 08:15",
+            estado: "SIN CONFIRMAR",
+            error: "Información no verificada - solo un reporte de testigo presencial",
+            url: "https://www.elheraldo.co/explosion-refineria"
+        },
+        {
+            titular: "Escándalo en FIFA: Colombia bajo investigación por sobornos",
+            medio: "El País",
+            fecha: "18/03/24 10:30",
+            estado: "ERROR",
+            error: "Contenido falso - la noticia no corresponde a hechos reales",
+            url: "https://www.elpais.com.co/fifa-colombia-investigacion"
+        },
+        {
+            titular: "Ministro de Educación renuncia tras controversia por reforma curricular",
+            medio: "Semana",
+            fecha: "18/03/24 11:45",
+            estado: "POR CONFIRMAR",
+            error: "Solo fuente anónima - requiere confirmación oficial",
+            url: "https://www.semana.com/ministro-educacion-renuncia"
+        },
+        {
+            titular: "Crisis energética: Colombia importará electricidad de Venezuela",
+            medio: "La República",
+            fecha: "18/03/24 14:20",
+            estado: "CONTRADICCIONES",
+            error: "Datos conflictivos con informe oficial del Ministerio de Energía",
+            url: "https://www.larepublica.co/colombia-venezuela-electricidad"
         }
     ],
     
