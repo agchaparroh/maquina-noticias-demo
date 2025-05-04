@@ -285,3 +285,18 @@
 .vinculation-button:hover {
   background-color: #bfdbfe;
 }
+
+
+/* Estilo para targetas de hechos */
+.hecho-card { 
+  transition: border-color 0.2s ease; 
+}
+.hecho-card:hover {
+  border-color: var(--color-blue-primary);
+}
+
+/* Estilo para bloques de hilos clicables */
+.thread-block:hover {
+  background-color: #f8fafc;
+  border-color: var(--color-blue-primary);
+}
