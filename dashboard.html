@@ -64,42 +64,6 @@
                 </div>
             </div>
         </div>
-            <button id="toggle-filters" class="w-full p-4 flex justify-between items-center border-b focus:outline-none">
-                <span class="text-lg font-bold">Filtros</span>
-                <svg class="w-5 h-5 transform transition-transform" id="filters-arrow" fill="currentColor" viewBox="0 0 20 20">
-                    <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" />
-                </svg>
-            </button>
-            
-            <div id="filters-content" class="p-4 hidden">
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-4">
-                    <div>
-                        <label class="block text-sm font-medium mb-2">Período</label>
-                        <select id="periodo-filter" class="border rounded p-2 w-full">
-                            <option value="ultimas-24h">Últimas 24h</option>
-                            <option value="ultimos-3-dias">Últimos 3 días</option>
-                            <option value="semana-pasada">Semana pasada</option>
-                            <option value="personalizado">Rango personalizado</option>
-                        </select>
-                    </div>
-                    
-                    <div>
-                        <label class="block text-sm font-medium mb-2">Ordenar por</label>
-                        <select id="orden-filter" class="border rounded p-2 w-full">
-                            <option value="relevancia">Relevancia</option>
-                            <option value="fecha_reciente">Fecha reciente</option>
-                            <option value="actividad">Actividad del hilo</option>
-                        </select>
-                    </div>
-                    
-                    <div>
-                        <button id="aplicar-filtros" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded w-full">
-                            Aplicar Filtros
-                        </button>
-                    </div>
-                </div>
-            </div>
-        </div>
         
         <!-- Panel de Artículos con Problemas (Colapsable) -->
         <div id="articulos-problemas" class="bg-white rounded-lg shadow mb-8">
