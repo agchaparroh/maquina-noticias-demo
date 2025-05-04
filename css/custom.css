@@ -1,187 +1,287 @@
-/* Variables CSS personalizadas - Estilo minimalista */
+/* Variables CSS personalizadas */
 :root {
-  --color-primary: #333333;
-  --color-secondary: #666666;
-  --color-tertiary: #999999;
-  --color-border: #e5e5e5;
-  --color-bg: #f8f8f8;
-  --color-accent: #0e639c;
-  --font-size-base: 12px;
-  --font-size-title: 16px;
-  --font-size-heading: 20px;
+  --color-blue-primary: #2563eb; /* bg-blue-600 */
+  --color-blue-hover: #1d4ed8; /* bg-blue-700 */
+  --color-red: #dc2626; /* text-red-600 */
+  --color-yellow: #eab308; /* text-yellow-500 */
+  --color-green: #16a34a; /* text-green-600 */
+  --color-purple: #9333ea; /* text-purple-600 */
 }
 
-/* Reset y tipografía minimalista */
-body {
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-  font-size: var(--font-size-base);
-  line-height: 1.6;
-  color: var(--color-primary);
-  background-color: white;
+/* Estilos para drag and drop */
+.drag-handle { 
+  cursor: grab; 
+}
+.drag-handle:active { 
+  cursor: grabbing; 
+}
+.dragging { 
+  opacity: 0.5; 
+  transform: scale(0.98);
+}
+.thread-block { 
+  transition: all 0.2s ease; 
+  position: relative;
+}
+.thread-block::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 3px;
+  background-color: transparent;
+  transition: background-color 0.2s ease;
+}
+.thread-block:hover::before {
+  background-color: var(--color-blue-primary);
 }
 
-/* Headings minimalistas */
-h1 { 
-  font-size: var(--font-size-heading);
-  font-weight: 300;
-  letter-spacing: -0.5px;
+/* Estilo para tarjetas de hechos */
+.fact-card { 
+  transition: border-color 0.2s ease; 
+}
+.fact-card:hover {
+  border-color: var(--color-blue-primary);
 }
 
-h2 { 
-  font-size: var(--font-size-title);
-  font-weight: 300;
-  letter-spacing: -0.3px;
+/* Indicador de relevancia */
+.relevance-indicator { 
+  transition: background-color 0.3s ease; 
 }
 
-/* Navegación sutil */
-nav {
-  background-color: white;
-  border-bottom: 1px solid var(--color-border);
+/* Slider personalizado */
+.relevance-slider {
+  -webkit-appearance: none;
+  width: 100%;
+  height: 6px;
+  border-radius: 3px;
+  background: #d1d5db;
+  outline: none;
+  opacity: 0.9;
+  transition: opacity 0.2s;
+}
+.relevance-slider:hover {
+  opacity: 1;
+}
+.relevance-slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: var(--color-blue-primary);
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+.relevance-slider::-webkit-slider-thumb:hover {
+  background: var(--color-blue-hover);
+  transform: scale(1.1);
+}
+.relevance-slider::-moz-range-thumb {
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: var(--color-blue-primary);
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+.relevance-slider::-moz-range-thumb:hover {
+  background: var(--color-blue-hover);
+  transform: scale(1.1);
 }
 
-nav a {
-  color: var(--color-secondary);
-  font-size: var(--font-size-base);
-  font-weight: 300;
-  transition: color 0.2s;
-}
-
-nav a:hover {
-  color: var(--color-primary);
-}
-
-/* Clases para colores de importancia - sutiles */
+/* Clases para colores de importancia */
 .importancia-1-2 {
-  background-color: #f5f5f5;
+  background-color: #d1d5db; /* gray-300 */
 }
 .importancia-3-4 {
-  background-color: #e8f0f7;
+  background-color: #60a5fa; /* blue-400 */
 }
 .importancia-5-6 {
-  background-color: #d4e6f1;
+  background-color: #22c55e; /* green-500 */
 }
 .importancia-7-8 {
-  background-color: #aed6f1;
+  background-color: #eab308; /* yellow-500 */
 }
 .importancia-9-10 {
-  background-color: #7fb3d5;
+  background-color: #ef4444; /* red-500 */
 }
 
-/* Cards minimalistas */
+/* Estilos para artículos y hechos */
 .hecho-card {
-  background: white;
-  border: 1px solid var(--color-border);
-  box-shadow: none;
-  transition: box-shadow 0.2s ease;
+  transition: border-color 0.3s ease;
 }
-
 .hecho-card:hover {
-  box-shadow: 0 1px 3px rgba(0,0,0,0.06);
+  border-color: var(--color-blue-primary);
 }
 
-/* Bloques de hilos */
-.hilo-block {
-  margin-bottom: 40px;
-  border-left: 2px solid var(--color-tertiary);
-  padding-left: 16px;
+/* Animación de carga */
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+.animate-spin {
+  animation: spin 1s linear infinite;
 }
 
-.hilo-header {
-  font-size: 16px;
-  font-weight: 400;
-  color: var(--color-primary);
-  margin-bottom: 12px;
-  display: flex;
+/* Efectos de transición */
+.transition-all {
+  transition-property: all;
+  transition-duration: 0.3s;
+}
+
+/* Estilo para panel de hilos */
+.hilo-vinculado {
+  background-color: #bfdbfe; /* bg-blue-100 */
+  color: #1e40af; /* text-blue-800 */
+}
+.hilo-sugerido {
+  background-color: #fef9c3; /* bg-yellow-100 */
+  color: #854d0e; /* text-yellow-800 */
+}
+
+/* Destacar entidades con notas */
+.entidad-con-notas {
+  background-color: #e9d5ff; /* bg-purple-100 */
+  color: #7e22ce; /* text-purple-600 */
+}
+
+/* Animación de pulso para elementos clickeables */
+@keyframes pulse {
+  0% {
+    box-shadow: 0 0 0 0 rgba(37, 99, 235, 0.7);
+  }
+  70% {
+    box-shadow: 0 0 0 5px rgba(37, 99, 235, 0);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(37, 99, 235, 0);
+  }
+}
+.pulse {
+  animation: pulse 1.5s infinite;
+}
+
+/* Estilos personalizados para la experiencia de usuario específica */
+.thread-handle {
+  cursor: grab;
+  user-select: none;
+  display: inline-flex;
   align-items: center;
+  justify-content: center;
+  width: 30px;
+  height: 30px;
+  color: #6b7280;
+  transition: color 0.2s ease;
+}
+.thread-handle:hover {
+  color: #4b5563;
+}
+.thread-handle:active {
+  cursor: grabbing;
 }
 
-/* Enlaces sutiles */
-.entity-link {
-  color: var(--color-accent);
+/* Estilos para títulos de hilos */
+.thread-title {
+  font-weight: bold;
+  color: #1f2937;
+  margin-left: 0.5rem;
+}
+
+/* Estilos para titulares principales */
+.main-headline {
+  font-weight: 600;
+  color: #111827;
+  font-size: 1.125rem;
+  line-height: 1.625;
+}
+
+/* Estilos para hechos en hilos */
+.fact-text {
+  color: #374151;
+  transition: color 0.2s ease;
+}
+.fact-text:hover {
+  color: var(--color-blue-primary);
+}
+
+/* Estilos para tags de país */
+.country-tag {
+  background-color: #f3f4f6;
+  color: #4b5563;
+  padding: 0.25rem 0.5rem;
+  border-radius: 0.25rem;
+  font-size: 0.75rem;
+  font-weight: 500;
+}
+
+/* Botón de fuentes */
+.sources-button {
+  color: var(--color-blue-primary);
   text-decoration: none;
-  border-bottom: 1px solid transparent;
-  transition: border-color 0.2s;
+  transition: text-decoration 0.2s ease;
+  font-size: 0.875rem;
+}
+.sources-button:hover {
+  text-decoration: underline;
 }
 
-.entity-link:hover {
-  border-bottom-color: var(--color-accent);
-}
-
-/* Menciones */
-.menciones-link {
-  color: var(--color-tertiary);
-  font-size: 11px;
-  margin-left: 4px;
-  cursor: pointer;
-}
-
-.menciones-popup {
-  background: white;
-  border: 1px solid var(--color-border);
-  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
-  border-radius: 4px;
-  padding: 12px;
-  position: absolute;
-  z-index: 50;
-}
-
-/* Filtros plegables */
-.filtros-container {
-  background: var(--color-bg);
-  border: 1px solid var(--color-border);
-  margin-bottom: 24px;
-}
-
-.toggle-filtros {
-  padding: 12px 16px;
-  cursor: pointer;
+/* Estilos para problemas */
+.problem-item {
+  background-color: #f9fafb;
+  border-radius: 0.5rem;
+  padding: 0.75rem;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  font-size: var(--font-size-title);
-  font-weight: 300;
+  margin-bottom: 0.5rem;
+}
+.problem-item:last-child {
+  margin-bottom: 0;
 }
 
-/* Problemas en formato bullet */
-.problema-item {
-  margin-bottom: 8px;
-  color: var(--color-secondary);
-  font-size: var(--font-size-base);
+/* Botón VER */
+.view-button {
+  background-color: #e5e7eb;
+  color: #374151;
+  font-weight: bold;
+  padding: 0.25rem 0.75rem;
+  border-radius: 0.25rem;
+  transition: background-color 0.2s ease;
+}
+.view-button:hover {
+  background-color: #d1d5db;
 }
 
-.ver-original {
-  color: var(--color-accent);
-  font-size: 11px;
-  margin-left: 8px;
-  text-decoration: none;
-  border-bottom: 1px solid transparent;
-}
-
-.ver-original:hover {
-  border-bottom-color: var(--color-accent);
-}
-
-/* Botones minimalistas */
-button {
-  background: none;
-  border: 1px solid var(--color-border);
-  color: var(--color-primary);
-  padding: 6px 12px;
-  font-size: var(--font-size-base);
+/* Estilos para desplegables */
+.dropdown-item {
+  padding: 0.5rem;
   cursor: pointer;
-  transition: all 0.2s;
+  transition: background-color 0.2s ease;
+}
+.dropdown-item:hover {
+  background-color: #f3f4f6;
 }
 
-button:hover {
-  background: var(--color-bg);
+/* Indicadores de vinculación */
+.vinculation-indicator {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-top: 0.5rem;
 }
-
-button.primary {
-  background: var(--color-primary);
-  color: white;
-  border: none;
+.vinculation-button {
+  background-color: #dbeafe;
+  color: var(--color-blue-primary);
+  padding: 0.25rem 0.75rem;
+  border-radius: 9999px;
+  font-size: 0.875rem;
+  transition: background-color 0.2s ease;
 }
-
-button.primary:hover {
-  background: var(--color-secondary);
+.vinculation-button:hover {
+  background-color: #bfdbfe;
 }
