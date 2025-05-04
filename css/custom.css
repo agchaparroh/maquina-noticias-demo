@@ -1,16 +1,35 @@
 /* Variables CSS personalizadas */
 :root {
-  --color-blue-primary: #2563eb; /* bg-blue-600 */
-  --color-blue-hover: #1d4ed8; /* bg-blue-700 */
-  --color-red: #dc2626; /* text-red-600 */
-  --color-yellow: #eab308; /* text-yellow-500 */
-  --color-green: #16a34a; /* text-green-600 */
-  --color-purple: #9333ea; /* text-purple-600 */
+  --color-primary: #000000;
+  --color-secondary: #404040;
+  --color-tertiary: #808080;
+  --color-quaternary: #c0c0c0;
+  --color-background: #ffffff;
+  --color-surface: #f8f8f8;
+  --color-border: #e5e5e5;
+  --border-radius: 4px;
+  --font-weight-thin: 200;
+  --font-weight-regular: 400;
+  --font-weight-medium: 500;
+  --font-weight-bold: 700;
 }
 
-/* Estilos para drag and drop */
+/* Fuentes */
+body {
+  font-family: system-ui, -apple-system, sans-serif;
+  font-weight: var(--font-weight-thin);
+  color: var(--color-primary);
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-weight: var(--font-weight-medium);
+  color: var(--color-primary);
+}
+
+/* Drag and drop */
 .drag-handle { 
   cursor: grab; 
+  opacity: 0.3;
 }
 .drag-handle:active { 
   cursor: grabbing; 
@@ -21,42 +40,30 @@
 }
 .thread-block { 
   transition: all 0.2s ease; 
-  position: relative;
+  border: 1px solid var(--color-border);
 }
-.thread-block::before {
-  content: "";
-  position: absolute;
-  left: 0;
-  top: 0;
-  bottom: 0;
-  width: 3px;
-  background-color: transparent;
-  transition: background-color 0.2s ease;
-}
-.thread-block:hover::before {
-  background-color: var(--color-blue-primary);
+.thread-block:hover {
+  border-color: var(--color-quaternary);
+  background: var(--color-background);
 }
 
-/* Estilo para tarjetas de hechos */
-.fact-card { 
-  transition: border-color 0.2s ease; 
+/* Tarjetas */
+.fact-card, .hecho-card, .problem-item { 
+  transition: all 0.2s ease;
+  border: 1px solid var(--color-border);
 }
-.fact-card:hover {
-  border-color: var(--color-blue-primary);
-}
-
-/* Indicador de relevancia */
-.relevance-indicator { 
-  transition: background-color 0.3s ease; 
+.fact-card:hover, .hecho-card:hover {
+  border-color: var(--color-quaternary);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
 }
 
 /* Slider personalizado */
 .relevance-slider {
   -webkit-appearance: none;
   width: 100%;
-  height: 6px;
-  border-radius: 3px;
-  background: #d1d5db;
+  height: 1px;
+  border-radius: 0;
+  background: var(--color-border);
   outline: none;
   opacity: 0.9;
   transition: opacity 0.2s;
@@ -66,107 +73,137 @@
 }
 .relevance-slider::-webkit-slider-thumb {
   -webkit-appearance: none;
-  width: 14px;
-  height: 14px;
+  width: 10px;
+  height: 10px;
   border-radius: 50%;
-  background: var(--color-blue-primary);
+  background: var(--color-primary);
   cursor: pointer;
   transition: all 0.2s ease;
 }
 .relevance-slider::-webkit-slider-thumb:hover {
-  background: var(--color-blue-hover);
   transform: scale(1.1);
 }
 .relevance-slider::-moz-range-thumb {
-  width: 14px;
-  height: 14px;
+  width: 10px;
+  height: 10px;
   border-radius: 50%;
-  background: var(--color-blue-primary);
+  background: var(--color-primary);
   cursor: pointer;
   transition: all 0.2s ease;
 }
 .relevance-slider::-moz-range-thumb:hover {
-  background: var(--color-blue-hover);
   transform: scale(1.1);
 }
 
-/* Clases para colores de importancia */
-.importancia-1-2 {
-  background-color: #d1d5db; /* gray-300 */
-}
-.importancia-3-4 {
-  background-color: #60a5fa; /* blue-400 */
-}
-.importancia-5-6 {
-  background-color: #22c55e; /* green-500 */
-}
-.importancia-7-8 {
-  background-color: #eab308; /* yellow-500 */
-}
-.importancia-9-10 {
-  background-color: #ef4444; /* red-500 */
+/* Indicadores de importancia */
+.importancia-1-2 { background-color: #f5f5f5; }
+.importancia-3-4 { background-color: #e5e5e5; }
+.importancia-5-6 { background-color: #d0d0d0; }
+.importancia-7-8 { background-color: #b0b0b0; }
+.importancia-9-10 { background-color: #909090; }
+
+/* Títulos */
+.thread-title {
+  font-weight: var(--font-weight-medium);
+  color: var(--color-primary);
+  margin-left: 0.5rem;
 }
 
-/* Estilos para artículos y hechos */
-.hecho-card {
-  transition: border-color 0.3s ease;
-}
-.hecho-card:hover {
-  border-color: var(--color-blue-primary);
-}
-
-/* Animación de carga */
-@keyframes spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
-}
-.animate-spin {
-  animation: spin 1s linear infinite;
+.main-headline {
+  font-weight: var(--font-weight-regular);
+  color: var(--color-primary);
+  font-size: 1.125rem;
+  line-height: 1.625;
 }
 
-/* Efectos de transición */
-.transition-all {
-  transition-property: all;
-  transition-duration: 0.3s;
+/* Textos */
+.fact-text {
+  color: var(--color-secondary);
+  transition: color 0.2s ease;
+  font-weight: var(--font-weight-thin);
+}
+.fact-text:hover {
+  color: var(--color-primary);
 }
 
-/* Estilo para panel de hilos */
-.hilo-vinculado {
-  background-color: #bfdbfe; /* bg-blue-100 */
-  color: #1e40af; /* text-blue-800 */
-}
-.hilo-sugerido {
-  background-color: #fef9c3; /* bg-yellow-100 */
-  color: #854d0e; /* text-yellow-800 */
-}
-
-/* Destacar entidades con notas */
-.entidad-con-notas {
-  background-color: #e9d5ff; /* bg-purple-100 */
-  color: #7e22ce; /* text-purple-600 */
+/* Tags */
+.country-tag {
+  background-color: var(--color-surface);
+  color: var(--color-secondary);
+  padding: 0.25rem 0.5rem;
+  border-radius: var(--border-radius);
+  font-size: 0.75rem;
+  font-weight: var(--font-weight-regular);
+  border: 1px solid var(--color-border);
 }
 
-/* Animación de pulso para elementos clickeables */
-@keyframes pulse {
-  0% {
-    box-shadow: 0 0 0 0 rgba(37, 99, 235, 0.7);
-  }
-  70% {
-    box-shadow: 0 0 0 5px rgba(37, 99, 235, 0);
-  }
-  100% {
-    box-shadow: 0 0 0 0 rgba(37, 99, 235, 0);
-  }
-}
-.pulse {
-  animation: pulse 1.5s infinite;
+.tag.tag-blue {
+  background-color: var(--color-surface);
+  color: var(--color-secondary);
+  padding: 0.25rem 0.5rem;
+  border-radius: var(--border-radius);
+  font-size: 0.75rem;
+  border: 1px solid var(--color-border);
 }
 
-/* Estilos personalizados para la experiencia de usuario específica */
+/* Botones */
+.sources-button {
+  color: var(--color-primary);
+  text-decoration: none;
+  transition: opacity 0.2s ease;
+  font-size: 0.875rem;
+  font-weight: var(--font-weight-thin);
+  opacity: 0.7;
+}
+.sources-button:hover {
+  opacity: 1;
+}
+
+.view-button {
+  background-color: transparent;
+  color: var(--color-primary);
+  font-weight: var(--font-weight-medium);
+  padding: 0.25rem 0.75rem;
+  border-radius: var(--border-radius);
+  border: 1px solid var(--color-border);
+  transition: all 0.2s ease;
+}
+.view-button:hover {
+  background-color: var(--color-surface);
+}
+
+/* Vinculation */
+.vinculation-indicator {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-top: 0.5rem;
+}
+.vinculation-button {
+  background-color: var(--color-surface);
+  color: var(--color-primary);
+  padding: 0.25rem 0.75rem;
+  border-radius: 9999px;
+  font-size: 0.875rem;
+  transition: background-color 0.2s ease;
+  border: 1px solid var(--color-border);
+}
+.vinculation-button:hover {
+  background-color: var(--color-border);
+}
+
+/* Dropdowns */
+.dropdown-item {
+  padding: 0.5rem;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+  border-bottom: 1px solid var(--color-border);
+}
+.dropdown-item:hover {
+  background-color: var(--color-surface);
+}
+
+/* Thread handle */
 .thread-handle {
   cursor: grab;
   user-select: none;
@@ -175,128 +212,77 @@
   justify-content: center;
   width: 30px;
   height: 30px;
-  color: #6b7280;
+  color: var(--color-tertiary);
   transition: color 0.2s ease;
+  font-weight: var(--font-weight-thin);
 }
 .thread-handle:hover {
-  color: #4b5563;
+  color: var(--color-secondary);
 }
 .thread-handle:active {
   cursor: grabbing;
 }
 
-/* Estilos para títulos de hilos */
-.thread-title {
-  font-weight: bold;
-  color: #1f2937;
-  margin-left: 0.5rem;
+/* Entidades */
+.entidad-con-notas {
+  background-color: var(--color-surface);
+  color: var(--color-secondary);
+  border: 1px solid var(--color-border);
 }
 
-/* Estilos para titulares principales */
-.main-headline {
-  font-weight: 600;
-  color: #111827;
-  font-size: 1.125rem;
-  line-height: 1.625;
+/* Animación de pulso */
+@keyframes pulse {
+  0% {
+    box-shadow: 0 0 0 0 rgba(0, 0, 0, 0.1);
+  }
+  70% {
+    box-shadow: 0 0 0 5px rgba(0, 0, 0, 0);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(0, 0, 0, 0);
+  }
+}
+.pulse {
+  animation: pulse 1.5s infinite;
 }
 
-/* Estilos para hechos en hilos */
-.fact-text {
-  color: #374151;
-  transition: color 0.2s ease;
-}
-.fact-text:hover {
-  color: var(--color-blue-primary);
+/* Toast messages */
+#toast-message {
+  background-color: var(--color-primary);
+  color: var(--color-background);
 }
 
-/* Estilos para tags de país */
-.country-tag {
-  background-color: #f3f4f6;
-  color: #4b5563;
-  padding: 0.25rem 0.5rem;
-  border-radius: 0.25rem;
-  font-size: 0.75rem;
-  font-weight: 500;
+/* Chat específico */
+.chat-container {
+  background: var(--color-background);
 }
 
-/* Botón de fuentes */
-.sources-button {
-  color: var(--color-blue-primary);
-  text-decoration: none;
-  transition: text-decoration 0.2s ease;
-  font-size: 0.875rem;
-}
-.sources-button:hover {
-  text-decoration: underline;
+.message-user {
+  background: var(--color-surface);
+  color: var(--color-primary);
 }
 
-/* Estilos para problemas */
-.problem-item {
-  background-color: #f9fafb;
-  border-radius: 0.5rem;
-  padding: 0.75rem;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 0.5rem;
-}
-.problem-item:last-child {
-  margin-bottom: 0;
+.message-system {
+  background: var(--color-surface);
+  color: var(--color-secondary);
 }
 
-/* Botón VER */
-.view-button {
-  background-color: #e5e7eb;
-  color: #374151;
-  font-weight: bold;
-  padding: 0.25rem 0.75rem;
-  border-radius: 0.25rem;
-  transition: background-color 0.2s ease;
-}
-.view-button:hover {
-  background-color: #d1d5db;
+/* Navegación */
+nav {
+  background: var(--color-primary);
+  color: var(--color-background);
 }
 
-/* Estilos para desplegables */
-.dropdown-item {
-  padding: 0.5rem;
-  cursor: pointer;
-  transition: background-color 0.2s ease;
-}
-.dropdown-item:hover {
-  background-color: #f3f4f6;
+nav a {
+  color: var(--color-background);
+  opacity: 0.8;
+  transition: opacity 0.2s ease;
 }
 
-/* Indicadores de vinculación */
-.vinculation-indicator {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.5rem;
-  margin-top: 0.5rem;
-}
-.vinculation-button {
-  background-color: #dbeafe;
-  color: var(--color-blue-primary);
-  padding: 0.25rem 0.75rem;
-  border-radius: 9999px;
-  font-size: 0.875rem;
-  transition: background-color 0.2s ease;
-}
-.vinculation-button:hover {
-  background-color: #bfdbfe;
+nav a:hover {
+  opacity: 1;
 }
 
-
-/* Estilo para targetas de hechos */
-.hecho-card { 
-  transition: border-color 0.2s ease; 
-}
-.hecho-card:hover {
-  border-color: var(--color-blue-primary);
-}
-
-/* Estilo para bloques de hilos clicables */
-.thread-block:hover {
-  background-color: #f8fafc;
-  border-color: var(--color-blue-primary);
+nav a.font-bold, nav a.underline {
+  opacity: 1;
 }
