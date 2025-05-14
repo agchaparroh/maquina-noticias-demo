@@ -16,10 +16,34 @@ const state = {
 
 // Función principal de inicialización
 document.addEventListener('DOMContentLoaded', function() {
+    console.log('[Dashboard] DOMContentLoaded event fired.');
+    console.log('[Dashboard] Initial mockData:', typeof mockData !== 'undefined' ? mockData : 'mockData is UNDEFINED'); // Log mockData
+
     // Obtener datos simulados
-    state.hilosNarrativos = mockData.hilosNarrativos.slice(); // Copia para manipular
-    state.hechosSinHilo = mockData.hechosSinHilo.slice();
-    state.articulosProblemas = mockData.articulosProblemas.slice();
+    if (typeof mockData !== 'undefined' && mockData.hilosNarrativos) {
+        console.log('[Dashboard] mockData.hilosNarrativos found, length:', mockData.hilosNarrativos.length);
+        state.hilosNarrativos = mockData.hilosNarrativos.slice(); // Copia para manipular
+        console.log('[Dashboard] state.hilosNarrativos populated, length:', state.hilosNarrativos.length);
+    } else {
+        console.error('[Dashboard] mockData or mockData.hilosNarrativos is undefined or not found!');
+        state.hilosNarrativos = []; // Ensure it's an array to prevent further errors
+    }
+
+    if (typeof mockData !== 'undefined' && mockData.hechosSinHilo) {
+        console.log('[Dashboard] mockData.hechosSinHilo found, length:', mockData.hechosSinHilo.length);
+        state.hechosSinHilo = mockData.hechosSinHilo.slice();
+        console.log('[Dashboard] state.hechosSinHilo populated, length:', state.hechosSinHilo.length);
+    } else {
+        console.error('[Dashboard] mockData or mockData.hechosSinHilo is undefined or not found!');
+        state.hechosSinHilo = [];
+    }
+
+    if (typeof mockData !== 'undefined' && mockData.articulosProblemas) {
+        state.articulosProblemas = mockData.articulosProblemas.slice();
+    } else {
+        console.error('[Dashboard] mockData or mockData.articulosProblemas is undefined or not found!');
+        state.articulosProblemas = [];
+    }
     
     // Ordenar hilos por relevancia (de mayor a menor)
     state.hilosNarrativos.sort((a, b) => b.relevancia - a.relevancia);
@@ -104,13 +128,21 @@ function renderProblemas() {
 
 // Renderizar hilos narrativos
 function renderHilosNarrativos() {
+    console.log('[Dashboard] renderHilosNarrativos called.');
     const container = document.getElementById('hilos-narrativos-container');
+    if (!container) {
+        console.error('[Dashboard] Container #hilos-narrativos-container not found!');
+        return;
+    }
     container.innerHTML = '';
     
+    console.log('[Dashboard] Rendering hilos. Count in state:', state.hilosNarrativos.length);
     state.hilosNarrativos.forEach((hilo, index) => {
+        console.log(`[Dashboard] Preparing to render hilo ${index + 1}:`, hilo);
         const hiloBlock = createHiloBlock(hilo, index);
         container.appendChild(hiloBlock);
     });
+    console.log('[Dashboard] renderHilosNarrativos finished.');
 }
 
 // Crear bloque de hilo narrativo
@@ -211,7 +243,7 @@ function createHiloBlock(hilo, index) {
     });
     
     footer.appendChild(countries);
-    footer.appendChild(sourcesButton);
+    footer.appendChild(sourcesLink);
     
     // Construir el bloque
     block.appendChild(header);
@@ -234,13 +266,21 @@ function createHiloBlock(hilo, index) {
 
 // Renderizar hechos sin hilo
 function renderHechosSinHilo() {
+    console.log('[Dashboard] renderHechosSinHilo called.');
     const container = document.getElementById('hechos-sin-hilo-list');
+    if (!container) {
+        console.error('[Dashboard] Container #hechos-sin-hilo-list not found!');
+        return;
+    }
     container.innerHTML = '';
-    
+
+    console.log('[Dashboard] Rendering hechos sin hilo. Count in state:', state.hechosSinHilo.length);
     state.hechosSinHilo.forEach(hecho => {
+        console.log('[Dashboard] Preparing to render hecho sin hilo:', hecho);
         const factCard = createFactCard(hecho);
         container.appendChild(factCard);
     });
+    console.log('[Dashboard] renderHechosSinHilo finished.');
 }
 
 // Crear tarjeta de hecho
@@ -261,7 +301,7 @@ function createFactCard(hecho) {
     
     const metadata = document.createElement('div');
     metadata.className = 'text-sm text-gray-600';
-    metadata.textContent = `${hecho.medio} - ${formatDate(hecho.fecha)}`;
+    metadata.textContent = `${hecho.medio} - ${hecho.articulo_titulo || 'Artículo'}`;
     
     content.appendChild(title);
     content.appendChild(metadata);
